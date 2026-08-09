@@ -1,27 +1,28 @@
 services:
-  mariadb:
-    image: mariadb:10
+  mysql:
+    image: mysql:9
     restart: unless-stopped
     # innodb-ft-min-token-size=2 (padrão é 3): nomes reais de evento têm tokens
     # de 2 caracteres com significado ("5k", "8k", UFs) que o índice FULLTEXT
-    # (ver migration eventos_fulltext) precisa indexar. Em produção, o mesmo
-    # parâmetro precisa ser configurado na instância gerenciada de MariaDB/MySQL
-    # — senão o comportamento diverge silenciosamente entre dev e prod.
+    # (ver migration eventos_fulltext) precisa indexar. Em produção (Railway),
+    # o mesmo parâmetro precisa ser aplicado via Settings → Deploy → Custom
+    # Start Command do serviço MySQL — senão o comportamento diverge
+    # silenciosamente entre dev e prod (ver RAILWAY.md).
     command: --innodb-ft-min-token-size=2
     environment:
-      MARIADB_DATABASE: potof
-      MARIADB_USER: potof
-      MARIADB_PASSWORD: potof
-      MARIADB_ROOT_PASSWORD: root
+      MYSQL_DATABASE: potof
+      MYSQL_USER: potof
+      MYSQL_PASSWORD: potof
+      MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
       interval: 5s
       timeout: 5s
       retries: 10
 
 volumes:
-  mariadb_data:
+  mysql_data:

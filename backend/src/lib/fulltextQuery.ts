@@ -1,5 +1,5 @@
-// Caracteres com significado especial na mini-linguagem do MariaDB BOOLEAN
-// MODE (+ - > < ( ) ~ * " @) — removidos de cada palavra antes de montar a
+// Caracteres com significado especial na mini-linguagem do MySQL/InnoDB
+// BOOLEAN MODE (+ - > < ( ) ~ * " @) — removidos de cada palavra antes de montar a
 // expressão, senão o AGAINST(...) pode virar sintaxe inválida (ou se comportar
 // de um jeito inesperado, tipo um "-palavra" virando "excluir" em vez de
 // "obrigatória"). Isso não é uma questão de SQL injection — os parâmetros
