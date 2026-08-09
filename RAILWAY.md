@@ -5,16 +5,21 @@ Este projeto sobe como **dois serviços** dentro do mesmo projeto Railway:
 1. **`web`** — o processo Node único (Fastify) que serve a API (`/api/*`) **e** o build
    estático do frontend (mesma origem, sem CORS — ver `backend/src/server.ts`). Builder
    NIXPACKS, configurado por [`railway.json`](railway.json) na raiz do repo.
-2. **`mariadb`** — banco próprio, via Dockerfile em [`deploy/mariadb/`](deploy/mariadb/),
-   com volume persistente. Não é o addon "MySQL" do Railway nem o template oficial
-   "MariaDB": é a imagem `mariadb:10` com `innodb_ft_min_token_size=2` aplicado por
-   arquivo de config (`deploy/mariadb/custom.cnf`), reproduzindo exatamente o que
-   `docker-compose.yml` faz em dev via `command:`. Esse parâmetro é obrigatório — sem
-   ele, o índice FULLTEXT (`eventos_busca_fulltext`) descarta tokens de 2 caracteres
-   como "5k", "8k" e UFs, e a busca passa a divergir silenciosamente entre dev e prod
-   (ver comentário no docker-compose.yml e em `backend/src/db/fulltextMaintenance.ts`).
-   Validado localmente com `docker build` + `SHOW VARIABLES LIKE 'innodb_ft_min_token_size'`
-   antes de escrever este guia.
+2. **`MySQL`** — o serviço de banco de dados **verificado do próprio Railway** ("+ New →
+   Database → Add MySQL"), não mais um Dockerfile próprio: ele já vem com volume
+   persistente e healthcheck configurados automaticamente, então não há mais nada pra
+   fazer nesse ponto. A única coisa que exige um passo manual é
+   `innodb_ft_min_token_size=2` — sem ele, o índice FULLTEXT (`eventos_busca_fulltext`)
+   descarta tokens de 2 caracteres como "5k", "8k" e UFs, e a busca diverge
+   silenciosamente entre dev e prod (ver comentário no `docker-compose.yml` e em
+   `backend/src/db/fulltextMaintenance.ts`). O template do Railway não expõe essa flag
+   por variável de ambiente, então ela precisa ser adicionada ao **Custom Start Command**
+   do serviço (Settings → Deploy) — ver passo 1.3 abaixo. **Isso ainda não foi validado
+   nem localmente nem no painel do Railway** (a troca de MariaDB pra MySQL foi feita só
+   nos arquivos de config, sem Docker disponível neste ambiente pra testar); antes de
+   confiar na busca em produção, confirme com
+   `SHOW VARIABLES LIKE 'innodb_ft_min_token_size'` — local via `docker compose up` e,
+   depois do primeiro deploy, via `railway connect` no serviço `MySQL`.
 
 Não existe deploy separado de "frontend" — o SPA é servido pelo mesmo processo backend,
 de propósito (evita os problemas de cookie cross-site que `SameSite=Lax` teria em
@@ -22,26 +27,22 @@ domínios diferentes; ver `README.md`).
 
 ## Passo a passo
 
-### 1. Criar o projeto e o serviço `mariadb`
+### 1. Criar o projeto e o serviço `MySQL`
 
 1. No painel Railway, crie um projeto novo e conecte este repositório GitHub.
-2. Adicione um serviço **"Deploy from GitHub repo"** apontando para o mesmo repo, mas em
-   **Settings → Source → Root Directory** defina `deploy/mariadb` e **Builder** `Dockerfile`.
-   Renomeie o serviço para `mariadb` (os nomes importam: as variáveis do serviço `web`
-   abaixo referenciam esse nome).
-3. Em **Settings → Volumes**, adicione um volume montado em `/var/lib/mysql` (senão os
-   dados somem a cada deploy).
-4. Em **Variables**, defina:
-
-   | Variável                | Valor                                  |
-   |--------------------------|-----------------------------------------|
-   | `MARIADB_DATABASE`       | `potof`                                 |
-   | `MARIADB_USER`           | `potof`                                 |
-   | `MARIADB_PASSWORD`       | gere um valor forte (`openssl rand -hex 24`) |
-   | `MARIADB_ROOT_PASSWORD`  | gere um valor forte (`openssl rand -hex 24`) |
-
-   Marque `MARIADB_PASSWORD` e `MARIADB_ROOT_PASSWORD` como *sensitive* no painel.
-5. Faça deploy do serviço e confirme nos logs que o MariaDB subiu sem erro.
+2. Clique **"+ New" → "Database" → "Add MySQL"**. O Railway provisiona o serviço com
+   volume persistente, healthcheck e as variáveis `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`,
+   `MYSQLPASSWORD`, `MYSQLDATABASE` e `MYSQL_URL` automaticamente — nada pra configurar
+   manualmente aqui, ao contrário do setup anterior com Dockerfile próprio.
+3. Anote o nome do serviço (por padrão `MySQL`; se você renomear, ajuste as referências
+   `${{MySQL.…}}` no passo 2 abaixo de acordo). Vá em **Settings → Deploy → Custom Start
+   Command** e adicione a flag `--innodb-ft-min-token-size=2` ao comando existente
+   (preserve as flags que o template já define, ex. `--innodb-use-native-aio=0
+   --disable-log-bin --performance_schema=0` — apenas acrescente a nova no final).
+   Redeploy o serviço depois de salvar.
+4. Confirme nos logs que o MySQL subiu sem erro e valide a flag (via `railway connect` ou
+   `railway run --service MySQL mysql -u root -p"$MYSQLPASSWORD" -e "SHOW VARIABLES LIKE
+   'innodb_ft_min_token_size'"`) antes de seguir — ver aviso na seção acima.
 
 ### 2. Criar o serviço `web`
 
@@ -52,7 +53,7 @@ domínios diferentes; ver `README.md`).
 
    | Variável | Valor | Observação |
    |---|---|---|
-   | `DATABASE_URL` | `mysql://${{mariadb.MARIADB_USER}}:${{mariadb.MARIADB_PASSWORD}}@${{mariadb.RAILWAY_PRIVATE_DOMAIN}}:3306/${{mariadb.MARIADB_DATABASE}}` | referência às variáveis do serviço `mariadb` via rede privada Railway |
+   | `DATABASE_URL` | `${{MySQL.MYSQL_URL}}` | referência direta à connection string que o serviço `MySQL` já expõe via rede privada Railway; confirme que o schema é `mysql://` (Prisma exige) antes do primeiro deploy — se não for, monte manualmente com `mysql://${{MySQL.MYSQLUSER}}:${{MySQL.MYSQLPASSWORD}}@${{MySQL.MYSQLHOST}}:${{MySQL.MYSQLPORT}}/${{MySQL.MYSQLDATABASE}}` |
    | `NODE_ENV` | `production` | **obrigatório** — sem isso os cookies de sessão (`potof_sid`, `potof_admin_sid`) sobem sem `Secure`, ver `backend/src/routes/eventos.ts` e `routes/admin/auth.ts` |
    | `ADMIN_SESSION_SECRET` | gere com `openssl rand -hex 32` | assina o cookie de sessão do admin |
    | `ADMIN_SEED_EMAIL` | email do primeiro admin | só usado pelo seed (passo 3) |
