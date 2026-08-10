@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { formatNumberBR } from '../formatters';
 
 export interface EntityColumn<T> {
   key: string;
@@ -125,7 +126,8 @@ export function EntityTable<T extends { id: number; ativo: boolean }>({
           Anterior
         </button>
         <span>
-          Página {page} de {totalPages} ({total} {total === 1 ? 'registro' : 'registros'})
+          Página {formatNumberBR(page)} de {formatNumberBR(totalPages)} ({formatNumberBR(total)}{' '}
+          {total === 1 ? 'registro' : 'registros'})
         </span>
         <button
           type="button"

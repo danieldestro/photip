@@ -18,3 +18,7 @@ export function formatDateTimeBR(iso: string | null | undefined): string {
   if (!iso) return '—';
   return new Date(iso).toLocaleString('pt-BR');
 }
+
+export function formatNumberBR(n: number): string {
+  return n.toLocaleString('pt-BR');
+}
