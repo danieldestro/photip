@@ -56,7 +56,7 @@ domínios diferentes; ver `README.md`).
    | `DATABASE_URL` | `${{MySQL.MYSQL_URL}}` | referência direta à connection string que o serviço `MySQL` já expõe via rede privada Railway; confirme que o schema é `mysql://` (Prisma exige) antes do primeiro deploy — se não for, monte manualmente com `mysql://${{MySQL.MYSQLUSER}}:${{MySQL.MYSQLPASSWORD}}@${{MySQL.MYSQLHOST}}:${{MySQL.MYSQLPORT}}/${{MySQL.MYSQLDATABASE}}` |
    | `NODE_ENV` | `production` | **obrigatório** — sem isso os cookies de sessão (`potof_sid`, `potof_admin_sid`) sobem sem `Secure`, ver `backend/src/routes/eventos.ts` e `routes/admin/auth.ts` |
    | `ADMIN_SESSION_SECRET` | gere com `openssl rand -hex 32` | assina o cookie de sessão do admin |
-   | `ADMIN_SEED_EMAIL` | email do primeiro admin | só usado pelo seed (passo 3) |
+   | `ADMIN_SEED_EMAIL` | email do primeiro admin | usado pelo seed, que roda sozinho a cada boot (ver seção 3) |
    | `ADMIN_SEED_PASSWORD` | senha forte | idem — marque como *sensitive* |
    | `SYNC_SCHEDULER_ENABLED` | `true` | sync automático de catálogo dos provedores roda dentro do próprio processo (ver `providers/scheduler.ts`) — não precisa de cron externo no Railway |
    | `SYNC_INTERVAL_HOURS` | `6` | ajuste se quiser outro intervalo |
@@ -76,19 +76,19 @@ domínios diferentes; ver `README.md`).
    separada (preview environment, domínio alternativo etc.), então mantenha-a correta.
 4. Confirme o healthcheck: `railway.json` já aponta para `GET /api/health`.
 
-### 3. Popular o banco (uma vez, após o primeiro deploy)
+### 3. Popular o banco (automático)
 
-O `start` do backend (`prisma migrate deploy && node dist/server.js`) já aplica as
-migrations sozinho a cada boot. Mas o **seed** (admin, provedores, categorias com ícones)
-não roda automaticamente — rode uma vez via Railway CLI:
-
-```bash
-railway link            # conecta ao projeto (escolha o serviço "web")
-railway run --service web npm run prisma:seed --workspace backend
-```
-
-O script (`backend/prisma/seed.ts`) é idempotente (usa `upsert` / checa existência antes
-de criar), então rodar de novo depois de um redeploy não duplica nada nem quebra.
+O `start` do backend (`prisma migrate deploy && prisma db seed && node dist/server.js`) já
+aplica as migrations **e** roda o seed sozinho a cada boot — nenhum passo manual necessário.
+Provedores, categorias (com ícones) e o mapeamento categoria-provedor entram inclusive antes
+disso, via DML embutido nas migrations (`prisma/migrations/*_dml_*`), então já existem assim
+que `prisma migrate deploy` termina. O seed (`backend/prisma/seed.ts`) cuida do que as
+migrations não podem cobrir por depender de segredo — o usuário admin, criado a partir de
+`ADMIN_SEED_EMAIL`/`ADMIN_SEED_PASSWORD` — e é seguro rodar em todo boot: usa `upsert` para os
+dados de referência e trata a violação de unicidade do e-mail como "admin já existe" em vez de
+falhar. Se essas duas variáveis não estiverem definidas quando o app subir, o app loga um aviso
+e segue sem criar admin nenhum; basta preenchê-las e fazer o próximo deploy/restart para que o
+seed seguinte o crie.
 
 ### 4. Verificar
 
@@ -107,9 +107,11 @@ painel do Railway).
 ## Notas
 
 - **Réplicas**: o `railway.json` não define `numReplicas` (fica em 1). Se algum dia
-  escalar para mais de uma réplica, mover `prisma migrate deploy` do `startCommand` para
-  `deploy.preDeployCommand` evita que múltiplas réplicas tentem migrar ao mesmo tempo —
-  não fiz essa mudança agora porque não há necessidade concreta dela hoje.
+  escalar para mais de uma réplica, mover `prisma migrate deploy && prisma db seed` do
+  `startCommand` para `deploy.preDeployCommand` evita que múltiplas réplicas tentem migrar/
+  semear ao mesmo tempo — não fiz essa mudança agora porque não há necessidade concreta dela
+  hoje. O seed já é resiliente a essa concorrência (trata a violação de unicidade do e-mail do
+  admin como sucesso), mas ainda roda em duplicidade de forma desnecessária nesse cenário.
 - **Manutenção do índice FULLTEXT**: `rebuildEventosFulltextIndex` (ver
   `backend/src/db/fulltextMaintenance.ts`) já roda sozinho depois de cada sync completo —
   nenhuma ação manual necessária em produção.
