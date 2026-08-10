@@ -38,12 +38,12 @@ export function AdminLayout() {
           ))}
         </nav>
         <div className="admin-sidebar__footer">
-          <span className="admin-sidebar__user">{admin.nome}</span>
+          <span className="admin-sidebar__user">{admin.nome} - v{__APP_VERSION__}</span>
           <button type="button" className="admin-btn admin-btn--ghost" onClick={() => void logout()}>
             Sair
           </button>
         </div>
-        <div className="admin-sidebar__version">v{__APP_VERSION__}</div>
+        {/* <div className="admin-sidebar__version">v{__APP_VERSION__}</div> */}
       </aside>
       <main className="admin-content">
         <Outlet />
