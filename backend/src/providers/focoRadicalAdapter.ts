@@ -212,19 +212,23 @@ interface RangeTotals {
   created: number;
   updated: number;
   skipped: number;
+  pagesFetched: number;
+  recordsRead: number;
 }
 
 // Varre um chunk de datas explícitas, paginando até acabar ou até MAX_PAGES_PER_CHUNK — usado
 // tanto pelo sweep do sync completo quanto pela janela do sync incremental (ver
 // fullSyncDateChunks/incrementalSyncDateChunks).
 async function syncDates(dates: string[], provedor: Provedor, log: FastifyBaseLogger): Promise<RangeTotals> {
-  const totals: RangeTotals = { created: 0, updated: 0, skipped: 0 };
+  const totals: RangeTotals = { created: 0, updated: 0, skipped: 0, pagesFetched: 0, recordsRead: 0 };
   let page = 1;
   let pageCount = 1;
 
   do {
     const { items, _meta } = await fetchCompetitions({ dates, page }, log);
     pageCount = _meta.pageCount || 1;
+    totals.pagesFetched += 1;
+    totals.recordsRead += items.length;
 
     for (const item of items) {
       try {
@@ -268,12 +272,14 @@ async function syncEventos(provedor: Provedor, log: FastifyBaseLogger, options: 
     ? fullSyncDateChunks(MONTHS_BACK, now)
     : incrementalSyncDateChunks(await getSyncIncrementalDias(), now);
 
-  const result: SyncResult = { created: 0, updated: 0, skipped: 0 };
+  const result: SyncResult = { created: 0, updated: 0, skipped: 0, pagesFetched: 0, recordsRead: 0 };
   for (const dates of chunks) {
     const totals = await syncDates(dates, provedor, log);
     result.created += totals.created;
     result.updated += totals.updated;
     result.skipped += totals.skipped;
+    result.pagesFetched += totals.pagesFetched;
+    result.recordsRead += totals.recordsRead;
   }
 
   log.info({ full: options.full, ...result }, 'sync foco radical finished');

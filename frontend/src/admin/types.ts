@@ -33,6 +33,9 @@ export interface SincronizacaoLog {
   finalizadoEm: string | null;
   status: StatusSincronizacao;
   mensagemErro: string | null;
+  paginasLidas: number | null;
+  registrosLidos: number | null;
+  registrosAtualizados: number | null;
 }
 
 export interface Categoria {

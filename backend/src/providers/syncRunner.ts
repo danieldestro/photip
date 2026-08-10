@@ -43,7 +43,13 @@ export async function runProviderSync(
     });
     await prisma.sincronizacaoLog.update({
       where: { id: logEntry.id },
-      data: { finalizadoEm: new Date(), status: 'sucesso' },
+      data: {
+        finalizadoEm: new Date(),
+        status: 'sucesso',
+        paginasLidas: result.pagesFetched,
+        registrosLidos: result.recordsRead,
+        registrosAtualizados: result.created + result.updated,
+      },
     });
 
     // Só depois de sync completo — é a rajada de UPDATEs (varre o catálogo inteiro do provedor)

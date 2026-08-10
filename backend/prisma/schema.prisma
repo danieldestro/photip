@@ -74,6 +74,12 @@ model SincronizacaoLog {
   status       StatusSincronizacao @default(em_andamento)
   mensagemErro String?             @db.Text @map("mensagem_erro")
 
+  // Métricas da execução — preenchidas só ao concluir com sucesso (ver syncRunner.ts), null
+  // enquanto em_andamento ou se falhar antes de o adapter retornar um resultado.
+  paginasLidas         Int? @map("paginas_lidas")
+  registrosLidos       Int? @map("registros_lidos")
+  registrosAtualizados Int? @map("registros_atualizados")
+
   @@index([provedorId])
   @@map("sincronizacoes_log")
 }

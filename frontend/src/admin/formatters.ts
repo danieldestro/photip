@@ -23,6 +23,12 @@ export function formatNumberBR(n: number): string {
   return n.toLocaleString('pt-BR');
 }
 
+// Métricas de execução (ex: SincronizacaoLog.paginasLidas) ficam null enquanto em_andamento ou
+// se a execução falhar antes do adapter retornar um resultado — ver syncRunner.ts.
+export function formatNumberOrDashBR(n: number | null | undefined): string {
+  return n == null ? '—' : formatNumberBR(n);
+}
+
 // Duração entre início e fim de uma execução (ex: sincronizacoes_log) — null enquanto
 // ainda em andamento (sem finalizadoEm).
 export function formatDuration(startIso: string, endIso: string | null | undefined): string {

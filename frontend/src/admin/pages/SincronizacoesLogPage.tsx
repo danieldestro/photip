@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchSincronizacoesLog, provedoresApi } from '../api';
-import { formatDateTimeBR, formatDuration, formatNumberBR } from '../formatters';
+import { formatDateTimeBR, formatDuration, formatNumberBR, formatNumberOrDashBR } from '../formatters';
 import type { Provedor, SincronizacaoLog, StatusSincronizacao } from '../types';
 
 const STATUS_LABELS: Record<StatusSincronizacao, string> = {
@@ -101,18 +101,21 @@ export function SincronizacoesLogPage() {
               <th>Fim</th>
               <th>Duração</th>
               <th>Status</th>
+              <th>Páginas lidas</th>
+              <th>Registros lidos</th>
+              <th>Registros atualizados</th>
               <th>Erro</th>
             </tr>
           </thead>
           <tbody>
             {loading && (
               <tr>
-                <td colSpan={7}>Carregando…</td>
+                <td colSpan={10}>Carregando…</td>
               </tr>
             )}
             {!loading && items.length === 0 && (
               <tr>
-                <td colSpan={7}>Nenhuma execução encontrada.</td>
+                <td colSpan={10}>Nenhuma execução encontrada.</td>
               </tr>
             )}
             {!loading &&
@@ -128,6 +131,9 @@ export function SincronizacoesLogPage() {
                       {STATUS_LABELS[log.status]}
                     </span>
                   </td>
+                  <td>{formatNumberOrDashBR(log.paginasLidas)}</td>
+                  <td>{formatNumberOrDashBR(log.registrosLidos)}</td>
+                  <td>{formatNumberOrDashBR(log.registrosAtualizados)}</td>
                   <td>
                     {log.mensagemErro ? (
                       <span className="admin-table__cell-truncate" title={log.mensagemErro}>

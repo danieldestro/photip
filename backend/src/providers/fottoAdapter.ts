@@ -72,6 +72,8 @@ async function syncEventos(provedor: Provedor, log: FastifyBaseLogger, options: 
   let created = 0;
   let updated = 0;
   let skipped = 0;
+  let pagesFetched = 0;
+  let recordsRead = 0;
 
   for (const mapping of mappings) {
     let page = 1;
@@ -82,6 +84,8 @@ async function syncEventos(provedor: Provedor, log: FastifyBaseLogger, options: 
         log
       );
       if (response.galleries.length === 0) break;
+      pagesFetched += 1;
+      recordsRead += response.galleries.length;
 
       let pageCreated = 0;
       let pageUpdated = 0;
@@ -134,8 +138,11 @@ async function syncEventos(provedor: Provedor, log: FastifyBaseLogger, options: 
     }
   }
 
-  log.info({ created, updated, skipped, categorias: mappings.length, full: options.full }, 'sync fotto finished');
-  return { created, updated, skipped };
+  log.info(
+    { created, updated, skipped, pagesFetched, recordsRead, categorias: mappings.length, full: options.full },
+    'sync fotto finished'
+  );
+  return { created, updated, skipped, pagesFetched, recordsRead };
 }
 
 export const fottoAdapter: ProviderAdapter = {

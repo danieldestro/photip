@@ -18,6 +18,10 @@ export interface SyncResult {
   created: number;
   updated: number;
   skipped: number;
+  /** Total de páginas lidas da API do provedor durante a execução — ver SincronizacaoLog.paginasLidas. */
+  pagesFetched: number;
+  /** Total de registros brutos lidos da API do provedor (antes de filtrar/pular) — ver SincronizacaoLog.registrosLidos. */
+  recordsRead: number;
 }
 
 export interface SyncOptions {
