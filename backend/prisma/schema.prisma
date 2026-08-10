@@ -46,8 +46,36 @@ model Provedor {
 
   eventos              Evento[]
   categoriasProvedores CategoriaProvedor[]
+  sincronizacoesLog    SincronizacaoLog[]
 
   @@map("provedores")
+}
+
+enum StatusSincronizacao {
+  em_andamento
+  sucesso
+  erro
+}
+
+// Histórico de execuções do sync de eventos (manual via admin ou automático via
+// scheduler — ver backend/src/providers/syncRunner.ts). Diferente de
+// Provedor.ultimaSincronizacaoEm/Resultado, que só guarda o resultado da última
+// execução: aqui cada rodada vira uma linha própria, permitindo consultar o
+// histórico completo (quando rodou, quanto durou, com que erro).
+model SincronizacaoLog {
+  id           Int                 @id @default(autoincrement())
+  // Nome do processo que gerou o log — hoje só "sync_eventos" existe, mas o campo
+  // é livre para acomodar outros processos agendados no futuro sem migration nova.
+  processo     String              @db.VarChar(50)
+  provedorId   Int                 @map("provedor_id")
+  provedor     Provedor            @relation(fields: [provedorId], references: [id], onDelete: Cascade)
+  iniciadoEm   DateTime            @default(now()) @map("iniciado_em")
+  finalizadoEm DateTime?           @map("finalizado_em")
+  status       StatusSincronizacao @default(em_andamento)
+  mensagemErro String?             @db.Text @map("mensagem_erro")
+
+  @@index([provedorId])
+  @@map("sincronizacoes_log")
 }
 
 model Categoria {

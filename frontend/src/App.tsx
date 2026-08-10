@@ -15,6 +15,7 @@ import { UsuariosPage } from './admin/pages/UsuariosPage';
 import { FotografosPage } from './admin/pages/FotografosPage';
 import { FotosPage } from './admin/pages/FotosPage';
 import { ConfiguracoesPage } from './admin/pages/ConfiguracoesPage';
+import { SincronizacoesLogPage } from './admin/pages/SincronizacoesLogPage';
 
 export function App() {
   return (
@@ -42,6 +43,7 @@ export function App() {
                   <Route path="usuarios" element={<UsuariosPage />} />
                   <Route path="fotografos" element={<FotografosPage />} />
                   <Route path="fotos" element={<FotosPage />} />
+                  <Route path="sincronizacoes" element={<SincronizacoesLogPage />} />
                   <Route path="configuracoes" element={<ConfiguracoesPage />} />
                 </Route>
               </Routes>

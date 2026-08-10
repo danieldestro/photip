@@ -167,6 +167,14 @@
   object-fit: contain;
 }
 
+.admin-table__cell-truncate {
+  display: inline-block;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
 .admin-thumb {
   width: 48px;
   height: 48px;
@@ -233,6 +241,29 @@
 .admin-badge--off {
   background: var(--potof-danger-bg);
   color: var(--potof-danger);
+}
+
+.admin-status-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.admin-status-badge--sucesso {
+  background: #e3f4e3;
+  color: #276b27;
+}
+
+.admin-status-badge--erro {
+  background: var(--potof-danger-bg);
+  color: var(--potof-danger);
+}
+
+.admin-status-badge--em_andamento {
+  background: var(--potof-yellow-tint);
+  color: #7a5b00;
 }
 
 .admin-modal__backdrop {

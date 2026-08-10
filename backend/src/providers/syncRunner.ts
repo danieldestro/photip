@@ -7,11 +7,16 @@ import type { SyncOptions, SyncResult } from './types';
 
 export class ProviderSyncUnsupportedError extends Error {}
 
+// Nome do processo gravado em SincronizacaoLog — usado no futuro pra distinguir de outros
+// processos agendados que venham a existir, hoje só este.
+const PROCESSO_SYNC_EVENTOS = 'sync_eventos';
+
 // Usado tanto pelo botão "Sincronizar" manual (routes/admin/provedores.ts)
 // quanto pelo agendador automático (scheduler.ts) — roda o adapter.syncEventos
 // do provedor e sempre grava o resultado (sucesso ou erro) em
 // ultimaSincronizacaoEm/Resultado, pra dar visibilidade no admin sem depender
-// só de log de servidor.
+// só de log de servidor, além de uma linha em SincronizacaoLog com o histórico
+// completo da execução (início, fim, status e erro).
 export async function runProviderSync(
   provedor: Provedor,
   log: FastifyBaseLogger,
@@ -23,6 +28,10 @@ export async function runProviderSync(
   }
 
   const modo = options.full ? 'completo' : 'incremental';
+  const logEntry = await prisma.sincronizacaoLog.create({
+    data: { processo: PROCESSO_SYNC_EVENTOS, provedorId: provedor.id },
+  });
+
   try {
     const result = await adapter.syncEventos(provedor, log, options);
     await prisma.provedor.update({
@@ -31,6 +40,10 @@ export async function runProviderSync(
         ultimaSincronizacaoEm: new Date(),
         ultimaSincronizacaoResultado: `OK (${modo}): ${result.created} criados, ${result.updated} atualizados, ${result.skipped} pulados.`,
       },
+    });
+    await prisma.sincronizacaoLog.update({
+      where: { id: logEntry.id },
+      data: { finalizadoEm: new Date(), status: 'sucesso' },
     });
 
     // Só depois de sync completo — é a rajada de UPDATEs (varre o catálogo inteiro do provedor)
@@ -49,6 +62,10 @@ export async function runProviderSync(
         ultimaSincronizacaoEm: new Date(),
         ultimaSincronizacaoResultado: `Erro (${modo}): ${message}`,
       },
+    });
+    await prisma.sincronizacaoLog.update({
+      where: { id: logEntry.id },
+      data: { finalizadoEm: new Date(), status: 'erro', mensagemErro: message },
     });
     throw err;
   }

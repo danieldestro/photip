@@ -22,3 +22,13 @@ export function formatDateTimeBR(iso: string | null | undefined): string {
 export function formatNumberBR(n: number): string {
   return n.toLocaleString('pt-BR');
 }
+
+// Duração entre início e fim de uma execução (ex: sincronizacoes_log) — null enquanto
+// ainda em andamento (sem finalizadoEm).
+export function formatDuration(startIso: string, endIso: string | null | undefined): string {
+  if (!endIso) return '—';
+  const totalSeconds = Math.max(0, Math.round((new Date(endIso).getTime() - new Date(startIso).getTime()) / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+}

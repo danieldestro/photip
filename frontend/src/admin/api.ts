@@ -1,5 +1,15 @@
 import { request } from '../api/client';
-import type { AdminSession, Categoria, Configuracoes, Evento, Foto, Fotografo, Provedor, Usuario } from './types';
+import type {
+  AdminSession,
+  Categoria,
+  Configuracoes,
+  Evento,
+  Foto,
+  Fotografo,
+  Provedor,
+  SincronizacaoLog,
+  Usuario,
+} from './types';
 
 export function adminLogin(email: string, senha: string): Promise<AdminSession> {
   return request('/api/admin/login', {
@@ -81,6 +91,10 @@ export function updateConfiguracoes(data: Configuracoes): Promise<Configuracoes>
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
+}
+
+export function fetchSincronizacoesLog(params?: ListParams): Promise<PagedResult<SincronizacaoLog>> {
+  return request(`/api/admin/sincronizacoes-log${buildQuery(params ?? {})}`);
 }
 
 export const provedoresApi = createCrudApi<Provedor>('/api/admin/provedores');

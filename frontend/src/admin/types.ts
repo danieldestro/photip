@@ -22,6 +22,19 @@ export interface Provedor {
   updatedAt: string;
 }
 
+export type StatusSincronizacao = 'em_andamento' | 'sucesso' | 'erro';
+
+export interface SincronizacaoLog {
+  id: number;
+  processo: string;
+  provedorId: number;
+  provedor?: Provedor;
+  iniciadoEm: string;
+  finalizadoEm: string | null;
+  status: StatusSincronizacao;
+  mensagemErro: string | null;
+}
+
 export interface Categoria {
   id: number;
   slug: string;

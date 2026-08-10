@@ -7,6 +7,7 @@ import { adminUsuariosRoutes } from './usuarios';
 import { adminFotografosRoutes } from './fotografos';
 import { adminFotosRoutes } from './fotos';
 import { adminConfiguracoesRoutes } from './configuracoes';
+import { adminSincronizacoesLogRoutes } from './sincronizacoesLog';
 
 export async function adminRoutes(app: FastifyInstance): Promise<void> {
   await app.register(adminAuthRoutes);
@@ -17,4 +18,5 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
   await app.register(adminFotografosRoutes);
   await app.register(adminFotosRoutes);
   await app.register(adminConfiguracoesRoutes);
+  await app.register(adminSincronizacoesLogRoutes);
 }
