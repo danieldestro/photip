@@ -2,6 +2,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { CATEGORIA_SEED_DATA } from './categoriaSeedData';
 import { FOCO_RADICAL_NOVAS_CATEGORIAS, FOCO_RADICAL_CATEGORIA_MAP } from './focoRadicalSeedData';
+import { FOTTO_NOVAS_CATEGORIAS, FOTTO_CATEGORIA_MAP } from './fottoSeedData';
 
 const prisma = new PrismaClient();
 
@@ -12,7 +13,7 @@ const prisma = new PrismaClient();
 const PINNED_CATEGORIA_IDS = [1, 22, 3, 4, 11, 18, 27, 26, 28, 34, 63, 25, 33, 79];
 
 function computeOrdemPorCategoriaId(): Map<number, number> {
-  const todas = [...CATEGORIA_SEED_DATA, ...FOCO_RADICAL_NOVAS_CATEGORIAS];
+  const todas = [...CATEGORIA_SEED_DATA, ...FOCO_RADICAL_NOVAS_CATEGORIAS, ...FOTTO_NOVAS_CATEGORIAS];
   const ordemPorId = new Map<number, number>();
   PINNED_CATEGORIA_IDS.forEach((id, idx) => ordemPorId.set(id, idx + 1));
 
@@ -51,7 +52,7 @@ async function seedAdmin(): Promise<void> {
   }
 }
 
-async function seedProvedores(): Promise<{ potofId: number; fotopId: number; focoRadicalId: number }> {
+async function seedProvedores(): Promise<{ potofId: number; fotopId: number; focoRadicalId: number; fottoId: number }> {
   const potof = await prisma.provedor.upsert({
     where: { slug: 'potof' },
     update: {},
@@ -73,8 +74,19 @@ async function seedProvedores(): Promise<{ potofId: number; fotopId: number; foc
     update: {},
     create: { slug: 'foco-radical', nome: 'Foco Radical', proprio: false },
   });
-  console.log('Provedores seed: Potof, Fotop, Foco Radical');
-  return { potofId: potof.id, fotopId: fotop.id, focoRadicalId: focoRadical.id };
+  const fotto = await prisma.provedor.upsert({
+    where: { slug: 'fotto' },
+    update: {},
+    create: {
+      slug: 'fotto',
+      nome: 'Fotto',
+      descricao: 'fotto.com.br',
+      urlSite: 'https://www.fotto.com.br',
+      proprio: false,
+    },
+  });
+  console.log('Provedores seed: Potof, Fotop, Foco Radical, Fotto');
+  return { potofId: potof.id, fotopId: fotop.id, focoRadicalId: focoRadical.id, fottoId: fotto.id };
 }
 
 // Os ids em CATEGORIA_SEED_DATA são os códigos numéricos do fotop
@@ -140,13 +152,46 @@ async function seedCategoriasProvedoresFocoRadical(focoRadicalId: number): Promi
   console.log(`Mapeamentos categoria-provedor (Foco Radical) seed: ${FOCO_RADICAL_CATEGORIA_MAP.length}`);
 }
 
+// Categorias novas trazidas pelo catálogo do fotto — ver comentário em fottoSeedData.ts sobre por
+// que só "Congresso" e "Festas" precisam de id novo.
+async function seedFottoCategorias(): Promise<void> {
+  for (const item of FOTTO_NOVAS_CATEGORIAS) {
+    const ordem = ORDEM_POR_CATEGORIA_ID.get(item.id) ?? 0;
+    await prisma.categoria.upsert({
+      where: { id: item.id },
+      update: { slug: item.slug, nome: item.nome, ordem },
+      create: { id: item.id, slug: item.slug, nome: item.nome, ordem },
+    });
+  }
+  console.log(`Categorias seed (Fotto): ${FOTTO_NOVAS_CATEGORIAS.length}`);
+}
+
+async function seedCategoriasProvedoresFotto(fottoId: number): Promise<void> {
+  for (const item of FOTTO_CATEGORIA_MAP) {
+    await prisma.categoriaProvedor.upsert({
+      where: {
+        provedorId_idCategoriaProvedor: { provedorId: fottoId, idCategoriaProvedor: item.idCategoriaProvedor },
+      },
+      update: { categoriaId: item.categoriaId },
+      create: {
+        categoriaId: item.categoriaId,
+        provedorId: fottoId,
+        idCategoriaProvedor: item.idCategoriaProvedor,
+      },
+    });
+  }
+  console.log(`Mapeamentos categoria-provedor (Fotto) seed: ${FOTTO_CATEGORIA_MAP.length}`);
+}
+
 async function main(): Promise<void> {
   await seedAdmin();
-  const { fotopId, focoRadicalId } = await seedProvedores();
+  const { fotopId, focoRadicalId, fottoId } = await seedProvedores();
   await seedCategorias();
   await seedCategoriasProvedores(fotopId);
   await seedFocoRadicalCategorias();
   await seedCategoriasProvedoresFocoRadical(focoRadicalId);
+  await seedFottoCategorias();
+  await seedCategoriasProvedoresFotto(fottoId);
 }
 
 main()
