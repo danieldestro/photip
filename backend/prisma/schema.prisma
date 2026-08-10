@@ -29,10 +29,10 @@ model Provedor {
   // Chave estável usada pelo registry de adapters (backend/src/providers/registry.ts)
   // pra resolver qual implementação usar — "nome" é texto livre editável no admin,
   // não serve pra isso.
-  slug        String   @unique
-  nome        String   @unique
+  slug        String   @unique @db.VarChar(200)
+  nome        String   @unique @db.VarChar(200)
   descricao   String?  @db.Text
-  urlSite     String?  @map("url_site")
+  urlSite     String?  @map("url_site") @db.VarChar(200)
   ativo       Boolean  @default(true)
   proprio     Boolean  @default(false)
 
@@ -97,15 +97,15 @@ model SincronizacaoLog {
 
 model Categoria {
   id        Int      @id @default(autoincrement())
-  slug      String   @unique
-  nome      String
+  slug      String   @unique @db.VarChar(200)
+  nome      String   @db.VarChar(200)
   descricao String?  @db.Text
   // Caminho (relativo ao front, ex: /categoria-icons/treino.svg) do ícone da categoria — nem
   // toda Categoria tem um: as originais do Fotop usam a fonte de ícones fi-estacao (ver
   // frontend/src/styles/fi-estacao.css) e ficam com este campo null; as novas trazidas pelo
   // catálogo do Foco Radical não têm glifo nessa fonte, então usam este ícone próprio (SVGs
   // baixados do catálogo público de filtros do focoradical.com.br) como alternativa.
-  icone     String?
+  icone     String?  @db.VarChar(200)
   // Posição de exibição no carrossel de categorias (CategoryPills) — menor primeiro, com nome
   // como desempate. Um punhado de categorias populares tem posição fixa (ver PINNED_CATEGORIA_IDS
   // em seed.ts); as demais seguem em ordem alfabética a partir daí. Não afeta o <select> de
@@ -131,7 +131,7 @@ model CategoriaProvedor {
   categoria           Categoria @relation(fields: [categoriaId], references: [id])
   provedorId          Int       @map("provedor_id")
   provedor            Provedor  @relation(fields: [provedorId], references: [id])
-  idCategoriaProvedor String    @map("id_categoria_provedor")
+  idCategoriaProvedor String    @map("id_categoria_provedor") @db.VarChar(200)
   createdAt           DateTime  @default(now()) @map("created_at")
   updatedAt           DateTime  @updatedAt @map("updated_at")
 
@@ -146,13 +146,16 @@ model CategoriaProvedor {
 
 model Evento {
   id          Int      @id @default(autoincrement())
-  nome        String
+  // TEXT em vez de VARCHAR: nome de evento vindo dos provedores, tamanho
+  // imprevisível assim como urlSite abaixo — VARCHAR(200) já estourou num
+  // sync do fotop (ver fotopAdapter.ts).
+  nome        String   @db.Text
   descricao   String?  @db.Text
-  local       String?
+  local       String?  @db.VarChar(200)
   dataHora    DateTime @map("data_hora")
-  cidade      String?
-  uf          String?
-  pais        String?  @default("BR")
+  cidade      String?  @db.VarChar(200)
+  uf          String?  @db.VarChar(200)
+  pais        String?  @default("BR") @db.VarChar(200)
 
   categoriaId Int       @map("categoria_id")
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
@@ -163,15 +166,16 @@ model Evento {
 
   provedorId       Int      @map("provedor_id")
   provedor         Provedor @relation(fields: [provedorId], references: [id])
-  idEventoProvedor String?  @map("id_evento_provedor")
+  idEventoProvedor String?  @map("id_evento_provedor") @db.VarChar(200)
 
   // TEXT em vez de VARCHAR: URL do evento no site do provedor, montada a partir do slug/path
   // que o Foco Radical gera do nome do evento — tamanho tão imprevisível quanto o de urlCapa
   // logo abaixo, e um VARCHAR(200) já estourou num sync completo (ver focoRadicalAdapter.ts).
   urlSite   String?  @db.Text @map("url_site")
-  // VARCHAR(191) (o padrão do Prisma) estourou com URLs de capa do Foco Radical baseadas no
-  // nome original do arquivo enviado pelo organizador do evento — não tem tamanho previsível.
-  urlCapa   String?  @db.VarChar(500) @map("url_capa")
+  // TEXT em vez de VARCHAR: URL de capa baseada no nome original do arquivo enviado pelo
+  // organizador do evento — não tem tamanho previsível. Já tinha estourado um VARCHAR(191)
+  // (default do Prisma) antes, e depois um VARCHAR(500) também.
+  urlCapa   String?  @db.Text @map("url_capa")
   ativo     Boolean  @default(true)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -200,15 +204,15 @@ enum Perfil {
 // backend/src/db/prisma.ts.
 model Usuario {
   id             Int       @id @default(autoincrement())
-  nome           String
-  email          String    @unique
-  cpf            String?   @unique
+  nome           String    @db.VarChar(200)
+  email          String    @unique @db.VarChar(200)
+  cpf            String?   @unique @db.VarChar(200)
   dataNascimento DateTime? @map("data_nascimento") @db.Date
-  cidade         String?
-  uf             String?
-  pais           String?   @default("BR")
+  cidade         String?   @db.VarChar(200)
+  uf             String?   @db.VarChar(200)
+  pais           String?   @default("BR") @db.VarChar(200)
   perfil         Perfil    @default(user)
-  senhaHash      String?   @map("senha_hash")
+  senhaHash      String?   @map("senha_hash") @db.VarChar(200)
   ativo          Boolean   @default(true)
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
@@ -237,8 +241,8 @@ model Foto {
   evento      Evento    @relation(fields: [eventoId], references: [id])
   fotografoId Int       @map("fotografo_id")
   fotografo   Fotografo @relation(fields: [fotografoId], references: [id])
-  urlFoto     String    @map("url_foto")
-  urlThumb    String?   @map("url_thumb")
+  urlFoto     String    @map("url_foto") @db.VarChar(200)
+  urlThumb    String?   @map("url_thumb") @db.VarChar(200)
   takenAt     DateTime? @map("taken_at")
   ativo       Boolean   @default(true)
   createdAt   DateTime  @default(now()) @map("created_at")
