@@ -70,7 +70,13 @@ export function EventosPage() {
   useEffect(() => {
     categoriasApi
       .list({ pageSize: 200 })
-      .then((res) => setCategoriaOptions(res.items.map((c) => ({ value: c.id, label: c.nome }))))
+      .then((res) =>
+        setCategoriaOptions(
+          res.items
+            .map((c) => ({ value: c.id, label: c.nome }))
+            .sort((a, b) => a.label.localeCompare(b.label, 'pt-BR')),
+        ),
+      )
       .catch((err) => console.error('[EventosPage] falha ao carregar categorias', err));
     provedoresApi
       .list({ pageSize: 200 })
