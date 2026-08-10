@@ -1,7 +1,7 @@
 {
   "name": "potof-backend",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.5.0",
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=.env src/server.ts",
     "build": "prisma generate && tsc -p tsconfig.json",

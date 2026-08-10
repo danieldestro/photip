@@ -33,6 +33,7 @@ export function NavDrawer({ onClose }: NavDrawerProps) {
         >
           Minhas favoritas
         </button>
+        <div className="nav-drawer__footer">v{__APP_VERSION__}</div>
       </div>
     </>
   );

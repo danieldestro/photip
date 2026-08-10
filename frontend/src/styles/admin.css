@@ -67,6 +67,12 @@
   white-space: nowrap;
 }
 
+.admin-sidebar__version {
+  padding-top: 8px;
+  font-size: 0.75rem;
+  color: var(--potof-muted);
+}
+
 .admin-content {
   flex: 1;
   padding: 32px;

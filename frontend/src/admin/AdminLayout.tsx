@@ -43,6 +43,7 @@ export function AdminLayout() {
             Sair
           </button>
         </div>
+        <div className="admin-sidebar__version">v{__APP_VERSION__}</div>
       </aside>
       <main className="admin-content">
         <Outlet />
