@@ -12,9 +12,12 @@ const FOTTO_LIST_PAGE_SIZE = 100;
 // fotto é enorme (centenas de milhares de galerias, de todos os anos) — sem paginar por categoria
 // mapeada e parar cedo, um sync varreria o histórico inteiro a cada ciclo. Full varre bem mais
 // fundo (primeiro sync do provedor); incremental confia que uma página inteira sem novidade
-// significa "alcançamos o que já foi sincronizado" (ver early-stop no loop abaixo).
-const MAX_SYNC_PAGES_FULL = 100;
-const MAX_SYNC_PAGES_INCREMENTAL = 5;
+// significa "alcançamos o que já foi sincronizado" (ver early-stop no loop abaixo). Diferente do
+// fotop/focoRadical, o fotto não tem noção de "janela de dias" (Provedor.syncJanelaIncrementalDias/
+// syncJanelaCompletaDias não se aplicam aqui) — só Provedor.syncMaxPaginas, usado com o mesmo
+// valor pros dois modos quando configurado; sem override, cada modo cai no seu default abaixo.
+const DEFAULT_MAX_SYNC_PAGES_FULL = 100;
+const DEFAULT_MAX_SYNC_PAGES_INCREMENTAL = 5;
 
 function mapMedia(media: FottoMediaRaw): Photo | null {
   // Vídeos não têm equivalente hoje na UI (PhotoGrid/PhotoViewer só entendem foto estática) —
@@ -67,7 +70,8 @@ async function fetchPhotos(evento: EventoComProvedor, sessionId: string, log: Fa
 
 async function syncEventos(provedor: Provedor, log: FastifyBaseLogger, options: SyncOptions): Promise<SyncResult> {
   const mappings = await prisma.categoriaProvedor.findMany({ where: { provedorId: provedor.id } });
-  const maxPages = options.full ? MAX_SYNC_PAGES_FULL : MAX_SYNC_PAGES_INCREMENTAL;
+  const defaultMaxPages = options.full ? DEFAULT_MAX_SYNC_PAGES_FULL : DEFAULT_MAX_SYNC_PAGES_INCREMENTAL;
+  const maxPages = provedor.syncMaxPaginas ?? defaultMaxPages;
 
   let created = 0;
   let updated = 0;

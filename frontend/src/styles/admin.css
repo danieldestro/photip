@@ -224,6 +224,18 @@
   gap: 0.5rem;
 }
 
+.admin-btn--icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  line-height: 0;
+}
+
+.admin-btn--icon.is-syncing svg {
+  animation: potof-spin 0.9s linear infinite;
+}
+
 .admin-badge {
   border: none;
   border-radius: 999px;

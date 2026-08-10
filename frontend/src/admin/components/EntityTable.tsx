@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { formatNumberBR } from '../formatters';
+import { EditIcon } from '../icons';
 
 export interface EntityColumn<T> {
   key: string;
@@ -110,8 +111,14 @@ export function EntityTable<T extends { id: number; ativo: boolean }>({
                     </button>
                   </td>
                   <td>
-                    <button type="button" className="admin-btn admin-btn--ghost" onClick={() => onEdit(item)}>
-                      Editar
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--ghost admin-btn--icon"
+                      onClick={() => onEdit(item)}
+                      title="Editar"
+                      aria-label="Editar"
+                    >
+                      <EditIcon />
                     </button>
                   </td>
                   {renderRowExtra && <td>{renderRowExtra(item)}</td>}

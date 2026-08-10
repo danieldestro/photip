@@ -14,15 +14,17 @@ import { getSyncIncrementalDias } from './syncSettings';
 import type { EventoComProvedor, FotosResult, ProviderAdapter, SelfieResult, SyncOptions, SyncResult } from './types';
 
 const MAX_PHOTO_PAGES = 20;
-// Rede de segurança contra loop infinito (API se comportando de forma inesperada e nunca
-// devolvendo página vazia/parcial) — não é mais o controle principal de parada, ver
-// FULL_SYNC_DIAS/getSyncIncrementalDias na função syncEventos abaixo.
-const MAX_SYNC_PAGES_SAFETY = 500;
+// Defaults usados quando o provedor não tem override configurado (Provedor.syncMaxPaginas /
+// syncJanelaCompletaDias — editáveis na tela admin de Provedores, ver schema.prisma). O teto de
+// páginas é rede de segurança contra loop infinito (API se comportando de forma inesperada e
+// nunca devolvendo página vazia/parcial) — não é o controle principal de parada, ver a janela de
+// dias na função syncEventos abaixo.
+const DEFAULT_MAX_SYNC_PAGES = 500;
 const FOTOP_LIST_PAGE_SIZE = 40;
 // Janela (em dias) usada no sync completo — cobre bem mais história que o incremental
-// (Configuracao.syncIncrementalDias), mas ainda finita, no mesmo espírito do MONTHS_BACK do
-// focoRadicalAdapter.
-const FULL_SYNC_DIAS = 365;
+// (Configuracao.syncIncrementalDias/Provedor.syncJanelaIncrementalDias), mas ainda finita, no
+// mesmo espírito do DEFAULT_FULL_SYNC_DIAS do focoRadicalAdapter.
+const DEFAULT_FULL_SYNC_DIAS = 365;
 
 async function sendSelfie(
   evento: EventoComProvedor,
@@ -101,11 +103,14 @@ async function syncEventos(provedor: Provedor, log: FastifyBaseLogger, options: 
   let pagesFetched = 0;
   let page = 1;
 
-  const cutoffDias = options.full ? FULL_SYNC_DIAS : await getSyncIncrementalDias();
+  const cutoffDias = options.full
+    ? (provedor.syncJanelaCompletaDias ?? DEFAULT_FULL_SYNC_DIAS)
+    : (provedor.syncJanelaIncrementalDias ?? (await getSyncIncrementalDias()));
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - cutoffDias);
+  const maxPages = provedor.syncMaxPaginas ?? DEFAULT_MAX_SYNC_PAGES;
 
-  pageLoop: while (page <= MAX_SYNC_PAGES_SAFETY) {
+  pageLoop: while (page <= maxPages) {
     const raw = await fetchEventosBusca({ page }, log);
     if (raw.length === 0) break;
     pagesFetched += 1;

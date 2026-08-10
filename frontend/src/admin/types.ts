@@ -18,6 +18,9 @@ export interface Provedor {
   proprio: boolean;
   ultimaSincronizacaoEm: string | null;
   ultimaSincronizacaoResultado: string | null;
+  syncMaxPaginas: number | null;
+  syncJanelaIncrementalDias: number | null;
+  syncJanelaCompletaDias: number | null;
   createdAt: string;
   updatedAt: string;
 }

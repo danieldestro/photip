@@ -41,6 +41,17 @@ model Provedor {
   ultimaSincronizacaoEm        DateTime? @map("ultima_sincronizacao_em")
   ultimaSincronizacaoResultado String?   @map("ultima_sincronizacao_resultado") @db.Text
 
+  // Overrides opcionais dos limites de sincronização deste provedor — null usa o default
+  // hardcoded do adapter (ver providers/fotopAdapter.ts, focoRadicalAdapter.ts,
+  // fottoAdapter.ts). syncJanelaIncrementalDias, quando null, cai no default GLOBAL
+  // (Configuracao.syncIncrementalDias) em vez de um valor fixo no código — os outros dois não
+  // têm equivalente global. Nenhum dos três é usado pelo Fotto na janela de dias: o catálogo
+  // dele não é filtrado por data (early-stop por página sem novidade), só syncMaxPaginas se
+  // aplica lá.
+  syncMaxPaginas            Int? @map("sync_max_paginas")
+  syncJanelaIncrementalDias Int? @map("sync_janela_incremental_dias")
+  syncJanelaCompletaDias    Int? @map("sync_janela_completa_dias")
+
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 

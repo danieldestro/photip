@@ -8,3 +8,4 @@ export const optionalText = z.preprocess(blankToNull, z.string().trim().nullable
 export const optionalUrl = z.preprocess(blankToNull, z.string().trim().url().nullable().optional());
 export const optionalDateTime = z.preprocess(blankToNull, z.coerce.date().nullable().optional());
 export const requiredDateTime = z.coerce.date();
+export const optionalPositiveInt = z.preprocess(blankToNull, z.number().int().positive().nullable().optional());

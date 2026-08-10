@@ -89,12 +89,15 @@ async function fetchPhotos(evento: EventoComProvedor, sessionId: string, log: Fa
   return { photos, message };
 }
 
-// Limite defensivo por chunk, no mesmo espírito do MAX_SYNC_PAGES do fotop — o retorno da API já
-// traz _meta.pageCount, isso só evita um loop infinito se a API se comportar de forma inesperada.
+// Defaults usados quando o provedor não tem override configurado (Provedor.syncMaxPaginas /
+// syncJanelaCompletaDias — editáveis na tela admin de Provedores, ver schema.prisma).
+//
+// O teto de páginas por chunk é defensivo, no mesmo espírito do fotop — o retorno da API já traz
+// _meta.pageCount, isso só evita um loop infinito se a API se comportar de forma inesperada.
 // Precisa ser generoso: um único mês de alta temporada já passou de 100 páginas de 80 itens numa
 // varredura manual (~8.400 eventos/mês, ver nota em CHUNK_SIZE_DAYS).
-const MAX_PAGES_PER_CHUNK = 300;
-const MONTHS_BACK = 12;
+const DEFAULT_MAX_PAGES_PER_CHUNK = 300;
+const DEFAULT_FULL_SYNC_DIAS = 365;
 // Tamanho de cada chunk de dias por request de dates_multi (ver CHUNK_SIZE_DAYS abaixo) — mantém
 // o tamanho de cada request comparável ao antigo sweep mês-a-mês, em vez de mandar meses inteiros
 // (ou o histórico incremental inteiro) numa lista só.
@@ -135,20 +138,15 @@ function chunk<T>(items: T[], size: number): T[][] {
 // mais nova de um período) retorna só os eventos cravados exatamente nelas, descartando qualquer
 // data entre as duas. Por isso o catálogo é varrido com a lista explícita de cada dia do período,
 // em chunks de CHUNK_SIZE_DAYS pra manter cada request num tamanho parecido com o antigo sweep
-// mês-a-mês (ver MAX_PAGES_PER_CHUNK).
+// mês-a-mês (ver DEFAULT_MAX_PAGES_PER_CHUNK).
 
-// Últimos MONTHS_BACK meses (incluindo o mês corrente), do mais antigo pro mais recente.
-function fullSyncDateChunks(monthsBack: number, now: Date): string[][] {
-  const first = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - (monthsBack - 1), 1));
-  const last = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0));
-  return chunk(allDatesBetween(first, last), CHUNK_SIZE_DAYS);
-}
-
-// Últimos `dias` dias até hoje — usada no sync incremental. Cobre praticamente toda a mudança
-// real (evento novo, foto de capa adicionada/trocada, correção de detalhe) porque competições
-// ficam "paradas" pouco tempo depois de acontecer; eventos mais antigos que isso só são
-// revisitados num sync completo.
-function incrementalSyncDateChunks(dias: number, now: Date): string[][] {
+// Últimos `dias` dias até hoje (incluindo hoje) — usada tanto no sync completo (janela grande,
+// Provedor.syncJanelaCompletaDias/DEFAULT_FULL_SYNC_DIAS) quanto no incremental (janela curta,
+// Provedor.syncJanelaIncrementalDias/Configuracao.syncIncrementalDias). O incremental cobre
+// praticamente toda a mudança real (evento novo, foto de capa adicionada/trocada, correção de
+// detalhe) porque competições ficam "paradas" pouco tempo depois de acontecer; eventos mais
+// antigos que isso só são revisitados num sync completo.
+function dateChunksForWindow(dias: number, now: Date): string[][] {
   const from = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - dias));
   return chunk(allDatesBetween(from, now), CHUNK_SIZE_DAYS);
 }
@@ -216,10 +214,14 @@ interface RangeTotals {
   recordsRead: number;
 }
 
-// Varre um chunk de datas explícitas, paginando até acabar ou até MAX_PAGES_PER_CHUNK — usado
-// tanto pelo sweep do sync completo quanto pela janela do sync incremental (ver
-// fullSyncDateChunks/incrementalSyncDateChunks).
-async function syncDates(dates: string[], provedor: Provedor, log: FastifyBaseLogger): Promise<RangeTotals> {
+// Varre um chunk de datas explícitas, paginando até acabar ou até maxPages — usado tanto pelo
+// sweep do sync completo quanto pela janela do sync incremental (ver dateChunksForWindow).
+async function syncDates(
+  dates: string[],
+  provedor: Provedor,
+  maxPages: number,
+  log: FastifyBaseLogger
+): Promise<RangeTotals> {
   const totals: RangeTotals = { created: 0, updated: 0, skipped: 0, pagesFetched: 0, recordsRead: 0 };
   let page = 1;
   let pageCount = 1;
@@ -245,8 +247,8 @@ async function syncDates(dates: string[], provedor: Provedor, log: FastifyBaseLo
     }
 
     page += 1;
-    if (page <= pageCount && page <= MAX_PAGES_PER_CHUNK) await sleep(REQUEST_PACING_MS);
-  } while (page <= pageCount && page <= MAX_PAGES_PER_CHUNK);
+    if (page <= pageCount && page <= maxPages) await sleep(REQUEST_PACING_MS);
+  } while (page <= pageCount && page <= maxPages);
 
   log.info(
     { dataDe: dates[0], dataAte: dates[dates.length - 1], ...totals },
@@ -258,23 +260,26 @@ async function syncDates(dates: string[], provedor: Provedor, log: FastifyBaseLo
 // Importa/atualiza o catálogo de eventos do Foco Radical no BD local, sob demanda (disparado
 // pelo admin) ou periodicamente (scheduler.ts).
 //
-// - full=true: varre os últimos MONTHS_BACK meses — usado no primeiro sync do provedor e sob
-//   pedido explícito do admin ("Sincronizar completo"). Cobre o histórico inteiro que a Home
-//   ainda expõe, mas é caro (centenas de requests, ~1 request/600ms pra não levar 429 do
-//   Cloudflare — ver focoRadicalClient.fetchCompetitions).
-// - full=false: varre só os últimos N dias (Configuracao.syncIncrementalDias — ver
-//   syncSettings.ts). Suficiente pro que muda de verdade dia a dia (evento novo, foto de capa),
-//   e barato o bastante pra rodar em todo ciclo do scheduler sem repetir o custo do sweep
-//   completo.
+// - full=true: varre os últimos N dias (Provedor.syncJanelaCompletaDias/DEFAULT_FULL_SYNC_DIAS)
+//   — usado no primeiro sync do provedor e sob pedido explícito do admin ("Sincronizar
+//   completo"). Cobre o histórico inteiro que a Home ainda expõe, mas é caro (centenas de
+//   requests, ~1 request/600ms pra não levar 429 do Cloudflare — ver
+//   focoRadicalClient.fetchCompetitions).
+// - full=false: varre só os últimos N dias (Provedor.syncJanelaIncrementalDias ou, se não
+//   configurado, Configuracao.syncIncrementalDias — ver syncSettings.ts). Suficiente pro que
+//   muda de verdade dia a dia (evento novo, foto de capa), e barato o bastante pra rodar em todo
+//   ciclo do scheduler sem repetir o custo do sweep completo.
 async function syncEventos(provedor: Provedor, log: FastifyBaseLogger, options: SyncOptions): Promise<SyncResult> {
   const now = new Date();
-  const chunks = options.full
-    ? fullSyncDateChunks(MONTHS_BACK, now)
-    : incrementalSyncDateChunks(await getSyncIncrementalDias(), now);
+  const dias = options.full
+    ? (provedor.syncJanelaCompletaDias ?? DEFAULT_FULL_SYNC_DIAS)
+    : (provedor.syncJanelaIncrementalDias ?? (await getSyncIncrementalDias()));
+  const chunks = dateChunksForWindow(dias, now);
+  const maxPages = provedor.syncMaxPaginas ?? DEFAULT_MAX_PAGES_PER_CHUNK;
 
   const result: SyncResult = { created: 0, updated: 0, skipped: 0, pagesFetched: 0, recordsRead: 0 };
   for (const dates of chunks) {
-    const totals = await syncDates(dates, provedor, log);
+    const totals = await syncDates(dates, provedor, maxPages, log);
     result.created += totals.created;
     result.updated += totals.updated;
     result.skipped += totals.skipped;

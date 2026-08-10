@@ -55,7 +55,9 @@ export function ConfiguracoesPage() {
           <p className="admin-settings-form__hint">
             Janela usada pelo botão "Sincronizar" (incremental) e pelo agendador automático dos
             provedores externos — quantos dias pra trás dos eventos são revarridos em cada ciclo.
-            "Sincronizar completo" ignora esse valor e varre o catálogo inteiro do provedor.
+            "Sincronizar completo" usa uma janela maior e fixa por provedor, não este valor. Este é
+            só o default global: cada provedor pode ter sua própria janela (e teto de páginas por
+            execução) na tela Provedores, que substitui este valor quando preenchida.
           </p>
           {error && <p className="admin-form__error">{error}</p>}
           <div className="admin-form__actions">

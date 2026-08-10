@@ -113,6 +113,7 @@ function renderInput(
           value={value === undefined || value === null ? '' : (value as number)}
           onChange={(e) => setField(field.key, e.target.value === '' ? null : Number(e.target.value))}
           required={field.required}
+          placeholder={field.placeholder}
         />
       );
     case 'text':

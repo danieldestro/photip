@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { prisma } from '../../db/prisma';
 import { registerCrudRoutes } from '../../admin/crud';
 import { requireAdmin } from '../../admin/requireAdmin';
-import { optionalText, optionalUrl } from '../../admin/zodHelpers';
+import { optionalPositiveInt, optionalText, optionalUrl } from '../../admin/zodHelpers';
 import { ProviderSyncUnsupportedError, runProviderSync } from '../../providers/syncRunner';
 
 const createSchema = z.object({
@@ -13,6 +13,11 @@ const createSchema = z.object({
   urlSite: optionalUrl,
   ativo: z.boolean().optional(),
   proprio: z.boolean().optional(),
+  // Overrides opcionais dos limites de sync deste provedor — null/ausente usa o default
+  // hardcoded do adapter (ver providers/*Adapter.ts e o comentário no schema.prisma).
+  syncMaxPaginas: optionalPositiveInt,
+  syncJanelaIncrementalDias: optionalPositiveInt,
+  syncJanelaCompletaDias: optionalPositiveInt,
 });
 
 const updateSchema = createSchema.partial();
