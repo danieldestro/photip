@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { CATEGORIA_SEED_DATA } from './categoriaSeedData';
 import { FOCO_RADICAL_NOVAS_CATEGORIAS, FOCO_RADICAL_CATEGORIA_MAP } from './focoRadicalSeedData';
@@ -35,15 +35,20 @@ async function seedAdmin(): Promise<void> {
     return;
   }
 
-  const existing = await prisma.usuario.findUnique({ where: { email } });
-  if (existing) {
-    console.log(`Admin já existe: ${email}`);
-    return;
-  }
-
   const senhaHash = await bcrypt.hash(password, 10);
-  await prisma.usuario.create({ data: { nome: 'Admin', email, senhaHash, perfil: 'admin' } });
-  console.log(`Admin criado: ${email}`);
+  try {
+    await prisma.usuario.create({ data: { nome: 'Admin', email, senhaHash, perfil: 'admin' } });
+    console.log(`Admin criado: ${email}`);
+  } catch (err) {
+    // P2002 = violação de unicidade em `email` — condição normal quando o seed já rodou antes
+    // (ele passa a rodar a cada boot, ver `start` em package.json) ou, em produção com múltiplas
+    // réplicas, quando duas instâncias tentam criar o admin ao mesmo tempo.
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
+      console.log(`Admin já existe: ${email}`);
+      return;
+    }
+    throw err;
+  }
 }
 
 async function seedProvedores(): Promise<{ potofId: number; fotopId: number; focoRadicalId: number }> {
