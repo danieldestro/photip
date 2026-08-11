@@ -6,6 +6,7 @@ import cookie from '@fastify/cookie';
 import multipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
 import { eventosRoutes } from './routes/eventos';
+import { favoritosRoutes } from './routes/favoritos';
 import { categoriasRoutes } from './routes/categorias';
 import { provedoresRoutes } from './routes/provedores';
 import { configRoutes } from './routes/config';
@@ -32,6 +33,7 @@ async function main(): Promise<void> {
   });
 
   await app.register(eventosRoutes);
+  await app.register(favoritosRoutes);
   await app.register(categoriasRoutes);
   await app.register(provedoresRoutes);
   await app.register(configRoutes);

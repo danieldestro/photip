@@ -180,7 +180,8 @@ model Evento {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  fotos Foto[]
+  fotos     Foto[]
+  favoritos Favorito[]
 
   // Evita duplicar o mesmo evento de um provedor externo se ele for
   // resincronizado; não se aplica a eventos próprios (idEventoProvedor nulo).
@@ -249,4 +250,24 @@ model Foto {
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
   @@map("fotos")
+}
+
+// Favoritos de fotos por sessão anônima (cookie potof_sid — ver lib/potofSession.ts).
+// fotoId é string livre SEM FK pra Foto: eventos de provedor externo (proprio=false)
+// não persistem fotos localmente (GET /api/eventos/:id/fotos busca ao vivo via adapter),
+// então o id favoritado pode ser um Foto.id local (como string) ou um id de foto do
+// provedor externo — nunca dá pra garantir uma FK única pros dois casos.
+model Favorito {
+  id             Int      @id @default(autoincrement())
+  potofSessionId String   @map("potof_session_id") @db.VarChar(36)
+  eventoId       Int      @map("evento_id")
+  evento         Evento   @relation(fields: [eventoId], references: [id])
+  fotoId         String   @map("foto_id") @db.VarChar(200)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  // Idempotência: favoritar 2x a mesma foto (double-click, retry de rede) não duplica linha.
+  @@unique([potofSessionId, eventoId, fotoId])
+  // Cobre a listagem por evento e, como prefixo, a contagem agregada por sessão.
+  @@index([potofSessionId, eventoId])
+  @@map("favoritos")
 }

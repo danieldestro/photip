@@ -1,13 +1,12 @@
-import { randomUUID } from 'node:crypto';
-import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import { Prisma } from '@prisma/client';
 import type { Evento, Foto } from '@prisma/client';
 import { prisma } from '../db/prisma';
 import { getAdapter } from '../providers/registry';
 import { buildBooleanExpression } from '../lib/fulltextQuery';
+import { getOrSetPotofSessionId } from '../lib/potofSession';
 import type { Photo } from '../fotop/photoParser';
 
-const POTOF_SESSION_COOKIE = 'potof_sid';
 const EVENTOS_BUSCA_PAGE_SIZE = 40;
 const AUTOCOMPLETE_LIMIT = 8;
 
@@ -21,20 +20,6 @@ const EVENTO_SUMMARY_INCLUDE = {
   _count: { select: { fotos: { where: { ativo: true } } } },
   provedor: { select: { slug: true } },
 } satisfies Prisma.EventoInclude;
-
-function getOrSetPotofSessionId(request: FastifyRequest, reply: FastifyReply): string {
-  const existing = request.cookies[POTOF_SESSION_COOKIE];
-  if (existing) return existing;
-
-  const sessionId = randomUUID();
-  reply.setCookie(POTOF_SESSION_COOKIE, sessionId, {
-    path: '/',
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-  });
-  return sessionId;
-}
 
 function mapEventoToSummary(
   evento: Evento & { fotos: Foto[]; _count: { fotos: number }; provedor: { slug: string } }

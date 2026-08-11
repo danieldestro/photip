@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
-import { FAVORITES_CHANGED_EVENT, getTotalFavoritesCount } from '../hooks/useFavorites';
+import { FAVORITES_CHANGED_EVENT } from '../hooks/useFavorites';
+import { fetchTotalFavoritesCount } from '../api/client';
 import { getLastEventId } from '../lib/lastEvent';
 import { NavDrawer } from './NavDrawer';
 
@@ -20,12 +21,20 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ eve
   const isHome = location.pathname === '/';
 
   useEffect(() => {
+    let cancelled = false;
     function refresh() {
-      setTotalFavorites(getTotalFavoritesCount());
+      fetchTotalFavoritesCount()
+        .then(({ total }) => {
+          if (!cancelled) setTotalFavorites(total);
+        })
+        .catch((err) => console.error('[Header] falha ao buscar total de favoritos', err));
     }
     refresh();
     window.addEventListener(FAVORITES_CHANGED_EVENT, refresh);
-    return () => window.removeEventListener(FAVORITES_CHANGED_EVENT, refresh);
+    return () => {
+      cancelled = true;
+      window.removeEventListener(FAVORITES_CHANGED_EVENT, refresh);
+    };
   }, [location.pathname]);
 
   const currentEventId =

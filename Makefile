@@ -69,16 +69,16 @@ clean: ## Remove build artifacts
 clean-all: clean ## Remove build artifacts and all node_modules
 	rm -rf node_modules backend/node_modules frontend/node_modules
 
-db-up: ## Start local MariaDB (docker compose)
-	docker compose up -d mariadb
+db-up: ## Start local mysql (docker compose)
+	docker compose up -d mysql
 
 db-down: ## Stop local MariaDB
-	docker compose stop mariadb
+	docker compose stop mysql
 
 db-clean: db-up ## Reset the local database: drops it, recreates it, and reapplies all migrations (all data lost)
 	$(NPM) run prisma:reset --workspace backend
 
-db-migrate: ## Run Prisma migrations (dev) against local MariaDB
+db-migrate: ## Run Prisma migrations (dev) against local DB
 	$(NPM) run prisma:migrate --workspace backend
 
 db-seed: ## Seed the database (admin user, provedores, categorias)
