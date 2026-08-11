@@ -4,22 +4,22 @@
 
 body {
   margin: 0;
-  background: var(--potof-bg);
-  color: var(--potof-text);
-  font-family: var(--potof-font-body);
+  background: var(--photip-bg);
+  color: var(--photip-text);
+  font-family: var(--photip-font-body);
 }
 
 a {
-  color: var(--potof-primary);
+  color: var(--photip-primary);
 }
 
 a:hover {
-  color: var(--potof-primary-hover);
+  color: var(--photip-primary-hover);
 }
 
 ::selection {
   background: #f2a93b;
-  color: var(--potof-text);
+  color: var(--photip-text);
 }
 
 button {
@@ -27,13 +27,13 @@ button {
   cursor: pointer;
 }
 
-@keyframes potof-spin {
+@keyframes photip-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-@keyframes potof-fade {
+@keyframes photip-fade {
   from {
     opacity: 0;
     transform: translateY(6px);
@@ -44,77 +44,77 @@ button {
   }
 }
 
-.potof-btn {
+.photip-btn {
   border: none;
   border-radius: 999px;
   font-weight: 800;
   cursor: pointer;
-  font-family: var(--potof-font-body);
+  font-family: var(--photip-font-body);
 }
 
-.potof-btn--primary {
-  background: var(--potof-primary);
+.photip-btn--primary {
+  background: var(--photip-primary);
   color: #fff;
   padding: 14px 28px;
   font-size: 14.5px;
 }
 
-.potof-btn--primary:hover {
-  background: var(--potof-primary-hover);
+.photip-btn--primary:hover {
+  background: var(--photip-primary-hover);
 }
 
-.potof-btn--outline {
+.photip-btn--outline {
   background: #fff;
-  border: 2px solid var(--potof-primary);
-  color: var(--potof-primary);
+  border: 2px solid var(--photip-primary);
+  color: var(--photip-primary);
   padding: 11px 20px;
   font-size: 13.5px;
 }
 
-.potof-btn--accent {
-  background: var(--potof-yellow-accent);
-  color: var(--potof-primary);
+.photip-btn--accent {
+  background: var(--photip-yellow-accent);
+  color: var(--photip-primary);
   padding: 12px 20px;
   font-size: 14px;
 }
 
-.potof-card {
+.photip-card {
   background: #fff;
-  border-radius: var(--potof-radius-lg);
+  border-radius: var(--photip-radius-lg);
   box-shadow: 0 4px 16px rgba(36, 27, 22, 0.07);
 }
 
-.potof-pill-select {
-  border: 1px solid var(--potof-border);
+.photip-pill-select {
+  border: 1px solid var(--photip-border);
   background: #fff;
   border-radius: 999px;
   padding: 9px 14px;
   font-size: 13px;
   font-weight: 700;
-  color: var(--potof-text);
+  color: var(--photip-text);
   cursor: pointer;
 }
 
-.potof-badge {
+.photip-badge {
   display: inline-flex;
   align-self: flex-start;
-  color: var(--potof-primary);
+  color: var(--photip-primary);
   font-size: 11px;
   font-weight: 800;
   padding: 4px 10px;
   border-radius: 999px;
-  background: var(--potof-yellow-tint-strong);
+  background: var(--photip-yellow-tint-strong);
 }
 
 .provider-badge {
   display: inline-flex;
   align-self: flex-start;
-  color: var(--potof-muted);
+  color: var(--photip-muted);
   font-size: 10.5px;
   font-weight: 800;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: 999px;
-  background: var(--potof-border);
+  background: var(--photip-border);
 }

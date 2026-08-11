@@ -35,11 +35,11 @@ export function CheckoutPage() {
   if (photos.length === 0) {
     return (
       <div className="checkout-page">
-        <div className="checkout-page__empty potof-card">
+        <div className="checkout-page__empty photip-card">
           <p>Nenhuma foto selecionada para compra.</p>
           <button
             type="button"
-            className="potof-btn potof-btn--primary"
+            className="photip-btn photip-btn--primary"
             onClick={() => navigate(`/evento/${eventId}/favoritas`)}
           >
             Voltar para favoritas
@@ -52,7 +52,7 @@ export function CheckoutPage() {
   if (status === 'success') {
     return (
       <div className="checkout-page">
-        <div className="checkout-page__success potof-card">
+        <div className="checkout-page__success photip-card">
           <div className="checkout-page__check">✓</div>
           <h1 className="checkout-page__title">Compra realizada com sucesso!</h1>
           <p className="checkout-page__subtitle">
@@ -64,7 +64,7 @@ export function CheckoutPage() {
           </p>
           <button
             type="button"
-            className="potof-btn potof-btn--primary"
+            className="photip-btn photip-btn--primary"
             onClick={() => navigate(`/evento/${eventId}`)}
           >
             Voltar para o evento
@@ -78,7 +78,7 @@ export function CheckoutPage() {
     <div className="checkout-page">
       <h1 className="checkout-page__title">Finalizar compra</h1>
 
-      <div className="checkout-page__summary potof-card">
+      <div className="checkout-page__summary photip-card">
         {eventName && <p className="checkout-page__event-name">{eventName}</p>}
         <div className="checkout-page__row">
           <span>
@@ -92,7 +92,7 @@ export function CheckoutPage() {
         </div>
       </div>
 
-      <div className="checkout-page__payment potof-card">
+      <div className="checkout-page__payment photip-card">
         <p className="checkout-page__payment-label">Pagamento</p>
         <div className="checkout-page__payment-mock">
           <span>💳</span>
@@ -103,7 +103,7 @@ export function CheckoutPage() {
 
       <button
         type="button"
-        className="potof-btn potof-btn--accent checkout-page__cta"
+        className="photip-btn photip-btn--accent checkout-page__cta"
         onClick={confirmPayment}
         disabled={status === 'processing'}
       >

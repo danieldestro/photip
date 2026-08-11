@@ -26,7 +26,7 @@ export function AdminLayout() {
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <div className="admin-sidebar__brand">potof admin</div>
+        <div className="admin-sidebar__brand">photip admin</div>
         <nav className="admin-sidebar__nav">
           {NAV_ITEMS.map((item) => (
             <NavLink

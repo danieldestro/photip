@@ -17,7 +17,7 @@ export function EventSummaryCard({ event }: EventSummaryCardProps) {
 
   return (
     <div
-      className="event-card potof-card"
+      className="event-card photip-card"
       onClick={() => navigate(`/evento/${event.id}`, { state: { event } })}
     >
       <div className="event-card__cover event-card__cover--photo">
@@ -34,7 +34,7 @@ export function EventSummaryCard({ event }: EventSummaryCardProps) {
       </div>
       <div className="event-card__body">
         <div className="event-card__badges">
-          <span className="potof-badge">{getCategoriaLabel(categorias, event.categoryId)}</span>
+          <span className="photip-badge">{getCategoriaLabel(categorias, event.categoryId)}</span>
           <ProviderBadge slug={event.providerSlug} />
         </div>
         <h3 className="event-card__name">{event.name}</h3>

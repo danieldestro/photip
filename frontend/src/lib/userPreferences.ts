@@ -1,6 +1,6 @@
 import { DEFAULT_ESTADO_ID } from '../data/estados';
 
-// Deliberately the bare key "user_preferences" (no "potof:" prefix), per spec.
+// Deliberately the bare key "user_preferences" (no "photip:" prefix), per spec.
 const USER_PREFERENCES_KEY = 'user_preferences';
 
 // App-wide default category filter (id do fotop pra "Treinos" — decisão de

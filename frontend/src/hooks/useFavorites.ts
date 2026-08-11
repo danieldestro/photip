@@ -1,73 +1,68 @@
 import { useCallback, useEffect, useState } from 'react';
+import { addFavorite, clearEventFavorites, fetchEventFavorites, removeFavorite } from '../api/client';
 
-const STORAGE_PREFIX = 'potof:favorites:';
-export const FAVORITES_CHANGED_EVENT = 'potof:favorites-changed';
-
-function storageKey(eventId: string): string {
-  return `${STORAGE_PREFIX}${eventId}`;
-}
-
-function loadFavorites(eventId: string): Set<string> {
-  try {
-    const raw = localStorage.getItem(storageKey(eventId));
-    return raw ? new Set(JSON.parse(raw) as string[]) : new Set();
-  } catch {
-    return new Set();
-  }
-}
-
-// Scans every event's favorites in localStorage to power the header badge,
-// which (like the design mockup) shows a single count across all events.
-export function getTotalFavoritesCount(): number {
-  let total = 0;
-  for (let i = 0; i < localStorage.length; i += 1) {
-    const key = localStorage.key(i);
-    if (!key || !key.startsWith(STORAGE_PREFIX)) continue;
-    try {
-      const raw = localStorage.getItem(key);
-      const ids = raw ? (JSON.parse(raw) as string[]) : [];
-      total += ids.length;
-    } catch {
-      // ignore malformed entries
-    }
-  }
-  return total;
-}
+export const FAVORITES_CHANGED_EVENT = 'photip:favorites-changed';
 
 export function useFavorites(eventId: string) {
-  const [favorites, setFavorites] = useState<Set<string>>(() => loadFavorites(eventId));
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    setFavorites(loadFavorites(eventId));
+    let cancelled = false;
+    fetchEventFavorites(eventId)
+      .then(({ fotoIds }) => {
+        if (!cancelled) setFavorites(new Set(fotoIds));
+      })
+      .catch((err) => console.error('[useFavorites] falha ao buscar favoritos do evento', err));
+    return () => {
+      cancelled = true;
+    };
   }, [eventId]);
 
-  // Persisting + notifying the header badge here (instead of inline in the state
-  // updater below) keeps the DOM-event dispatch out of React's render/reconcile
-  // pass — dispatching synchronously inside a setState updater let Header's
-  // listener call its own setState mid-update, which React flags as an
-  // illegal cross-component render-phase update.
+  // Notifies the header badge whenever the local set changes — kept out of the
+  // state updater below (same reasoning as before the backend migration): a
+  // synchronous dispatch inside a setState updater let Header's listener call
+  // its own setState mid-update, which React flags as an illegal cross-component
+  // render-phase update.
   useEffect(() => {
-    localStorage.setItem(storageKey(eventId), JSON.stringify([...favorites]));
     window.dispatchEvent(new Event(FAVORITES_CHANGED_EVENT));
-  }, [eventId, favorites]);
+  }, [favorites]);
 
-  const toggleFavorite = useCallback((photoId: string) => {
-    setFavorites((prev) => {
-      const next = new Set(prev);
-      if (next.has(photoId)) {
-        next.delete(photoId);
-      } else {
-        next.add(photoId);
-      }
-      return next;
-    });
-  }, []);
+  const toggleFavorite = useCallback(
+    (photoId: string) => {
+      const wasFavorite = favorites.has(photoId);
+
+      // Optimistic: the UI updates immediately, the API call happens in the
+      // background. Waiting for the round-trip on every tap would introduce
+      // noticeable lag when favoriting several photos in a row.
+      setFavorites((prev) => {
+        const next = new Set(prev);
+        if (wasFavorite) next.delete(photoId);
+        else next.add(photoId);
+        return next;
+      });
+
+      const request = wasFavorite ? removeFavorite(eventId, photoId) : addFavorite(eventId, photoId);
+      request.catch((err) => {
+        console.error('[useFavorites] falha ao sincronizar favorito, revertendo', err);
+        setFavorites((prev) => {
+          const next = new Set(prev);
+          if (wasFavorite) next.add(photoId);
+          else next.delete(photoId);
+          return next;
+        });
+      });
+    },
+    [eventId, favorites]
+  );
 
   const isFavorite = useCallback((photoId: string) => favorites.has(photoId), [favorites]);
 
   const clearFavorites = useCallback(() => {
     setFavorites(new Set());
-  }, []);
+    clearEventFavorites(eventId).catch((err) =>
+      console.error('[useFavorites] falha ao limpar favoritos no backend', err)
+    );
+  }, [eventId]);
 
   return { favorites, toggleFavorite, isFavorite, clearFavorites };
 }

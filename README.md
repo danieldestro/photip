@@ -1,4 +1,4 @@
-# potof
+# photip
 
 SPA mobile-first para buscar, navegar e favoritar fotos de eventos esportivos do
 [fotop.com.br](https://fotop.com.br), usando busca por selfie.
@@ -9,7 +9,7 @@ SPA mobile-first para buscar, navegar e favoritar fotos de eventos esportivos do
 [Browser: React SPA] <--mesma origem--> [Node.js backend (BFF)] <--HTTP--> [fotop.com.br]
 ```
 
-O navegador do usuário só conversa com o backend potof (mesma origem, sem CORS). O
+O navegador do usuário só conversa com o backend photip (mesma origem, sem CORS). O
 backend é quem mantém a sessão do fotop.com.br (`FOTOPSITESESSID`) por usuário, reenvia
 a selfie para `salva-face`, busca a página de resultados e faz o parsing do HTML
 (`.foto-item[data-id] a.fotoCorredor img`) devolvendo JSON limpo para o front.

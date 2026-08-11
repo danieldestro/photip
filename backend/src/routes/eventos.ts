@@ -1,13 +1,12 @@
-import { randomUUID } from 'node:crypto';
-import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import { Prisma } from '@prisma/client';
 import type { Evento, Foto } from '@prisma/client';
 import { prisma } from '../db/prisma';
 import { getAdapter } from '../providers/registry';
 import { buildBooleanExpression } from '../lib/fulltextQuery';
+import { getOrSetPhotipSessionId } from '../lib/photipSession';
 import type { Photo } from '../fotop/photoParser';
 
-const POTOF_SESSION_COOKIE = 'potof_sid';
 const EVENTOS_BUSCA_PAGE_SIZE = 40;
 const AUTOCOMPLETE_LIMIT = 8;
 
@@ -21,20 +20,6 @@ const EVENTO_SUMMARY_INCLUDE = {
   _count: { select: { fotos: { where: { ativo: true } } } },
   provedor: { select: { slug: true } },
 } satisfies Prisma.EventoInclude;
-
-function getOrSetPotofSessionId(request: FastifyRequest, reply: FastifyReply): string {
-  const existing = request.cookies[POTOF_SESSION_COOKIE];
-  if (existing) return existing;
-
-  const sessionId = randomUUID();
-  reply.setCookie(POTOF_SESSION_COOKIE, sessionId, {
-    path: '/',
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-  });
-  return sessionId;
-}
 
 function mapEventoToSummary(
   evento: Evento & { fotos: Foto[]; _count: { fotos: number }; provedor: { slug: string } }
@@ -228,9 +213,9 @@ export async function eventosRoutes(app: FastifyInstance): Promise<void> {
   });
 
   app.post<{ Params: { id: string } }>('/api/eventos/:id/selfie', async (request, reply) => {
-    const sessionId = getOrSetPotofSessionId(request, reply);
+    const sessionId = getOrSetPhotipSessionId(request, reply);
     const id = Number.parseInt(request.params.id, 10);
-    const log = request.log.child({ potofSessionId: sessionId, eventoId: id, route: 'selfie' });
+    const log = request.log.child({ photipSessionId: sessionId, eventoId: id, route: 'selfie' });
 
     const data = await request.file();
     if (!data) {
@@ -279,9 +264,9 @@ export async function eventosRoutes(app: FastifyInstance): Promise<void> {
   });
 
   app.get<{ Params: { id: string } }>('/api/eventos/:id/fotos', async (request, reply) => {
-    const sessionId = getOrSetPotofSessionId(request, reply);
+    const sessionId = getOrSetPhotipSessionId(request, reply);
     const id = Number.parseInt(request.params.id, 10);
-    const log = request.log.child({ potofSessionId: sessionId, eventoId: id, route: 'fotos' });
+    const log = request.log.child({ photipSessionId: sessionId, eventoId: id, route: 'fotos' });
 
     const evento = await prisma.evento.findUnique({ where: { id }, include: { provedor: true } });
     if (!evento || !evento.ativo) {

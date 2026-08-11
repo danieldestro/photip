@@ -6,6 +6,7 @@ import cookie from '@fastify/cookie';
 import multipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
 import { eventosRoutes } from './routes/eventos';
+import { favoritosRoutes } from './routes/favoritos';
 import { categoriasRoutes } from './routes/categorias';
 import { provedoresRoutes } from './routes/provedores';
 import { configRoutes } from './routes/config';
@@ -24,14 +25,15 @@ async function main(): Promise<void> {
     origin: FRONTEND_ORIGIN,
     credentials: true,
   });
-  // secret enables signed cookies for the admin session (potof_admin_sid);
-  // the public potof_sid cookie stays unsigned, same as before.
+  // secret enables signed cookies for the admin session (photip_admin_sid);
+  // the public photip_sid cookie stays unsigned, same as before.
   await app.register(cookie, { secret: process.env.ADMIN_SESSION_SECRET });
   await app.register(multipart, {
     limits: { fileSize: 10 * 1024 * 1024 },
   });
 
   await app.register(eventosRoutes);
+  await app.register(favoritosRoutes);
   await app.register(categoriasRoutes);
   await app.register(provedoresRoutes);
   await app.register(configRoutes);
@@ -42,7 +44,7 @@ async function main(): Promise<void> {
 
   // Em produção, backend e frontend rodam no mesmo processo/origem (o build do Vite é
   // servido diretamente daqui), evitando os problemas de cookie cross-site que o
-  // SameSite=Lax de potof_sid teria se front e back ficassem em domínios diferentes.
+  // SameSite=Lax de photip_sid teria se front e back ficassem em domínios diferentes.
   if (existsSync(FRONTEND_DIST)) {
     await app.register(fastifyStatic, { root: FRONTEND_DIST });
 

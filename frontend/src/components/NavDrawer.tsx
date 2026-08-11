@@ -18,7 +18,7 @@ export function NavDrawer({ onClose }: NavDrawerProps) {
     <>
       <div className="nav-drawer__overlay" onClick={onClose} />
       <div className="nav-drawer">
-        <div className="nav-drawer__logo">POTOF</div>
+        <div className="nav-drawer__logo">PHOTIP</div>
         <button type="button" className="nav-drawer__item" onClick={() => go('/')}>
           Início
         </button>

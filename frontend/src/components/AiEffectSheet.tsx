@@ -74,12 +74,12 @@ export function AiEffectSheet({ photo, onClose }: AiEffectSheetProps) {
           <div className="ai-effect-sheet__result">
             <img src={state.dataUrl} alt="Foto gerada por IA" />
             <div className="ai-effect-sheet__result-actions">
-              <a className="potof-btn potof-btn--primary" href={state.dataUrl} download="potof-ia.png">
+              <a className="photip-btn photip-btn--primary" href={state.dataUrl} download="photip-ia.png">
                 Baixar
               </a>
               <button
                 type="button"
-                className="potof-btn potof-btn--outline"
+                className="photip-btn photip-btn--outline"
                 onClick={() => setState({ step: 'options' })}
               >
                 Tentar outro efeito
@@ -93,7 +93,7 @@ export function AiEffectSheet({ photo, onClose }: AiEffectSheetProps) {
             <p className="ai-effect-sheet__error">{state.message}</p>
             <button
               type="button"
-              className="potof-btn potof-btn--outline"
+              className="photip-btn photip-btn--outline"
               onClick={() => setState({ step: 'options' })}
             >
               Tentar novamente

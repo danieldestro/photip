@@ -76,6 +76,26 @@ export function fetchEventPhotos(
   return request(`/api/eventos/${eventId}/fotos`);
 }
 
+export function fetchEventFavorites(eventId: string): Promise<{ eventId: string; fotoIds: string[] }> {
+  return request(`/api/eventos/${eventId}/favoritos`);
+}
+
+export function addFavorite(eventId: string, photoId: string): Promise<{ ok: boolean }> {
+  return request(`/api/eventos/${eventId}/favoritos/${encodeURIComponent(photoId)}`, { method: 'PUT' });
+}
+
+export function removeFavorite(eventId: string, photoId: string): Promise<{ ok: boolean }> {
+  return request(`/api/eventos/${eventId}/favoritos/${encodeURIComponent(photoId)}`, { method: 'DELETE' });
+}
+
+export function clearEventFavorites(eventId: string): Promise<{ ok: boolean }> {
+  return request(`/api/eventos/${eventId}/favoritos`, { method: 'DELETE' });
+}
+
+export function fetchTotalFavoritesCount(): Promise<{ total: number }> {
+  return request('/api/favoritos/contagem');
+}
+
 export function fetchAppConfig(): Promise<{ features: { aiPhotoEdit: boolean } }> {
   return request('/api/config');
 }

@@ -164,17 +164,17 @@ function buildSessionClient(jar: CookieJar): AxiosInstance {
 // (evento.urlSite) quando disponível — não é estritamente necessário que seja essa página
 // específica, mas mantém o Referer do upload consistente com uma navegação real.
 export async function ensureEventSession(
-  potofSessionId: string,
+  photipSessionId: string,
   eventUrl: string,
   logger: FastifyBaseLogger = noopLogger
 ): Promise<void> {
-  const jar = getOrCreateJar(potofSessionId);
+  const jar = getOrCreateJar(photipSessionId);
   const client = buildSessionClient(jar);
   const res = await client.get(eventUrl, { maxRedirects: 5 });
 
   logger.info(
     {
-      potofSessionId,
+      photipSessionId,
       eventUrl,
       status: res.status,
       cookiesInJar: (await jar.getCookies(FOCO_RADICAL_BASE_URL)).map((c) => c.key),
@@ -197,13 +197,13 @@ export interface UploadSelfieResult {
 }
 
 export async function uploadSelfie(
-  potofSessionId: string,
+  photipSessionId: string,
   competitionId: string,
   eventUrl: string,
   file: { buffer: Buffer; filename: string; mimeType: string },
   logger: FastifyBaseLogger = noopLogger
 ): Promise<UploadSelfieResult> {
-  const jar = getOrCreateJar(potofSessionId);
+  const jar = getOrCreateJar(photipSessionId);
 
   // Simula o clique em "Estou ciente" — ver nota acima, isso não corresponde a nenhuma request.
   await jar.setCookie(`search_by_face_terms_accepted_competition_${competitionId}=true; Path=/`, FOCO_RADICAL_BASE_URL);
@@ -213,7 +213,7 @@ export async function uploadSelfie(
   form.append('selfie', file.buffer, { filename: file.filename, contentType: file.mimeType });
 
   logger.info(
-    { potofSessionId, competitionId, filename: file.filename, mimeType: file.mimeType, sizeBytes: file.buffer.length },
+    { photipSessionId, competitionId, filename: file.filename, mimeType: file.mimeType, sizeBytes: file.buffer.length },
     'foco radical: sending selfie to upload-selfie'
   );
 
@@ -226,13 +226,13 @@ export async function uploadSelfie(
   const location = res.headers['location'];
 
   logger.info(
-    { potofSessionId, competitionId, status: res.status, location },
+    { photipSessionId, competitionId, status: res.status, location },
     'foco radical: upload-selfie response'
   );
 
   if (!location || res.status < 300 || res.status >= 400) {
     logger.warn(
-      { potofSessionId, competitionId, status: res.status, body: preview(res.data) },
+      { photipSessionId, competitionId, status: res.status, body: preview(res.data) },
       'foco radical: upload-selfie did not redirect as expected'
     );
     return { imageId: null, noFaceMatch: false, reason: null, raw: res.data };

@@ -78,7 +78,7 @@ export function EventoPage() {
   }, [eventId]);
 
   useEffect(() => {
-    document.title = headerInfo?.name ? `${headerInfo.name} · potof` : 'potof';
+    document.title = headerInfo?.name ? `${headerInfo.name} · photip` : 'photip';
   }, [headerInfo?.name]);
 
   useEffect(() => {
@@ -165,10 +165,10 @@ export function EventoPage() {
   return (
     <div className={`evento-page${status === 'results' ? ' evento-page--with-footer' : ''}`}>
       {headerInfo?.name && (
-        <div className="evento-hero potof-card">
+        <div className="evento-hero photip-card">
           {(categoryLabel || headerInfo.providerSlug) && (
             <div className="evento-hero__badges">
-              {categoryLabel && <span className="potof-badge">{categoryLabel}</span>}
+              {categoryLabel && <span className="photip-badge">{categoryLabel}</span>}
               {headerInfo.providerSlug && <ProviderBadge slug={headerInfo.providerSlug} />}
             </div>
           )}
@@ -211,7 +211,7 @@ export function EventoPage() {
       )}
 
       {status === 'loading' && (
-        <div className="evento-loading potof-card">
+        <div className="evento-loading photip-card">
           <div className="evento-loading__spinner" />
           <p>{proprio ? 'Carregando fotos do evento…' : 'Buscando suas fotos com reconhecimento facial…'}</p>
         </div>

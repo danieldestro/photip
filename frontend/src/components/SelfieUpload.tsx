@@ -24,7 +24,7 @@ export function SelfieUpload({ onSearch, loading }: SelfieUploadProps) {
   }
 
   return (
-    <div className="selfie-upload potof-card">
+    <div className="selfie-upload photip-card">
       <div className="selfie-upload__avatar">
         {preview ? (
           <img src={preview} alt="Prévia da selfie" />
@@ -52,7 +52,7 @@ export function SelfieUpload({ onSearch, loading }: SelfieUploadProps) {
       <div className="selfie-upload__actions">
         <button
           type="button"
-          className="potof-btn potof-btn--outline"
+          className="photip-btn photip-btn--outline"
           onClick={() => cameraInputRef.current?.click()}
           disabled={loading}
         >
@@ -69,7 +69,7 @@ export function SelfieUpload({ onSearch, loading }: SelfieUploadProps) {
         </button>
         <button
           type="button"
-          className="potof-btn potof-btn--outline"
+          className="photip-btn photip-btn--outline"
           onClick={() => galleryInputRef.current?.click()}
           disabled={loading}
         >
@@ -79,7 +79,7 @@ export function SelfieUpload({ onSearch, loading }: SelfieUploadProps) {
 
       <button
         type="button"
-        className="potof-btn potof-btn--accent selfie-upload__submit"
+        className="photip-btn photip-btn--accent selfie-upload__submit"
         onClick={handleSubmit}
         disabled={!selectedFile || loading}
       >

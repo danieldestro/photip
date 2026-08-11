@@ -3,7 +3,7 @@ import type { FotosResult } from '../providers/types';
 // Ao contrário de fotop/focoRadical (que guardam só um id de sessão/imagem e refazem a busca
 // depois), a busca por selfie do fotto é uma chamada única e stateless que já devolve as fotos —
 // não existe um "image_id" pra reconsultar depois. Por isso cacheia aqui o próprio FotosResult já
-// pronto, keyed por (potofSessionId, galleryId), pra fetchPhotos (que a interface ProviderAdapter
+// pronto, keyed por (photipSessionId, galleryId), pra fetchPhotos (que a interface ProviderAdapter
 // não dá acesso à selfie de novo) devolver o mesmo resultado do sendSelfie. Mesmo formato
 // TTL-map-com-sweep de focoRadical/faceSearchSession.ts.
 interface Entry {
@@ -15,16 +15,16 @@ const TTL_MS = 30 * 60 * 1000;
 
 const store = new Map<string, Entry>();
 
-function key(potofSessionId: string, galleryId: string): string {
-  return `${potofSessionId}:${galleryId}`;
+function key(photipSessionId: string, galleryId: string): string {
+  return `${photipSessionId}:${galleryId}`;
 }
 
-export function setSearchResult(potofSessionId: string, galleryId: string, result: FotosResult): void {
-  store.set(key(potofSessionId, galleryId), { result, storedAt: Date.now() });
+export function setSearchResult(photipSessionId: string, galleryId: string, result: FotosResult): void {
+  store.set(key(photipSessionId, galleryId), { result, storedAt: Date.now() });
 }
 
-export function getSearchResult(potofSessionId: string, galleryId: string): FotosResult | null {
-  const k = key(potofSessionId, galleryId);
+export function getSearchResult(photipSessionId: string, galleryId: string): FotosResult | null {
+  const k = key(photipSessionId, galleryId);
   const entry = store.get(k);
   if (!entry) return null;
 

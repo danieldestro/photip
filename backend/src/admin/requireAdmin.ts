@@ -15,7 +15,7 @@ declare module 'fastify' {
 }
 
 // preHandler shared by every /api/admin/* route (except login) — reads the
-// signed potof_admin_sid cookie, resolves the usuario (perfil=admin) and
+// signed photip_admin_sid cookie, resolves the usuario (perfil=admin) and
 // attaches it to the request, or rejects with 401.
 export async function requireAdmin(request: FastifyRequest, reply: FastifyReply): Promise<void> {
   const raw = request.cookies[ADMIN_SESSION_COOKIE];

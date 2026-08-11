@@ -18,7 +18,7 @@ export function AppLayout() {
     const el = headerRef.current;
     if (!el) return;
     const setHeaderHeight = () => {
-      document.documentElement.style.setProperty('--potof-header-height', `${el.offsetHeight}px`);
+      document.documentElement.style.setProperty('--photip-header-height', `${el.offsetHeight}px`);
     };
     setHeaderHeight();
     const observer = new ResizeObserver(setHeaderHeight);
@@ -27,9 +27,9 @@ export function AppLayout() {
   }, []);
 
   return (
-    <div className="potof-app">
+    <div className="photip-app">
       <Header ref={headerRef} eventTitle={eventTitle} />
-      <main className="potof-app__content">
+      <main className="photip-app__content">
         <Outlet context={context} />
       </main>
     </div>

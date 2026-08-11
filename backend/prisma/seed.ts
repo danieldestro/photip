@@ -52,11 +52,11 @@ async function seedAdmin(): Promise<void> {
   }
 }
 
-async function seedProvedores(): Promise<{ potofId: number; fotopId: number; focoRadicalId: number; fottoId: number }> {
-  const potof = await prisma.provedor.upsert({
-    where: { slug: 'potof' },
+async function seedProvedores(): Promise<{ photipId: number; fotopId: number; focoRadicalId: number; fottoId: number }> {
+  const photip = await prisma.provedor.upsert({
+    where: { slug: 'photip' },
     update: {},
-    create: { slug: 'potof', nome: 'Potof', descricao: 'Potof', proprio: true },
+    create: { slug: 'photip', nome: 'Photip', descricao: 'Photip', proprio: true },
   });
   const fotop = await prisma.provedor.upsert({
     where: { slug: 'fotop' },
@@ -85,8 +85,8 @@ async function seedProvedores(): Promise<{ potofId: number; fotopId: number; foc
       proprio: false,
     },
   });
-  console.log('Provedores seed: Potof, Fotop, Foco Radical, Fotto');
-  return { potofId: potof.id, fotopId: fotop.id, focoRadicalId: focoRadical.id, fottoId: fotto.id };
+  console.log('Provedores seed: Photip, Fotop, Foco Radical, Fotto');
+  return { photipId: photip.id, fotopId: fotop.id, focoRadicalId: focoRadical.id, fottoId: fotto.id };
 }
 
 // Os ids em CATEGORIA_SEED_DATA são os códigos numéricos do fotop
