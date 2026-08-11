@@ -45,8 +45,12 @@ button {
 }
 
 .photip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--photip-radius-sm);
   font-weight: 800;
   cursor: pointer;
   font-family: var(--photip-font-body);
@@ -80,8 +84,8 @@ button {
 
 .photip-card {
   background: #fff;
-  border-radius: var(--photip-radius-lg);
-  box-shadow: 0 4px 16px rgba(16, 26, 53, 0.07);
+  border: 1px solid var(--photip-border);
+  border-radius: var(--photip-radius-md);
 }
 
 .photip-pill-select {

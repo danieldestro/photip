@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Search } from 'lucide-react';
 import { searchEventosPorNome } from '../api/client';
 import { useDebouncedValue } from '../hooks/useDebouncedValue';
 import type { EventHeaderInfo, EventNameSuggestion } from '../types';
@@ -80,18 +81,7 @@ export function EventNameAutocomplete({ estado }: EventNameAutocompleteProps) {
         onBlur={() => setOpen(false)}
       />
       <button type="button" aria-label="Buscar" tabIndex={-1}>
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-          <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2.4" />
-          <line
-            x1="21"
-            y1="21"
-            x2="16.65"
-            y2="16.65"
-            stroke="currentColor"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-          />
-        </svg>
+        <Search size={19} strokeWidth={2.4} aria-hidden="true" />
       </button>
 
       {showDropdown && (

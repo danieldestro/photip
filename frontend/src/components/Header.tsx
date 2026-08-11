@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { ChevronLeft, Menu, Search, ShoppingCart } from 'lucide-react';
 import { FAVORITES_CHANGED_EVENT } from '../hooks/useFavorites';
 import { fetchTotalFavoritesCount } from '../api/client';
 import { getLastEventId } from '../lib/lastEvent';
@@ -69,7 +70,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ eve
               onClick={goBack}
               aria-label="Voltar"
             >
-              ‹
+              <ChevronLeft size={20} strokeWidth={2.4} aria-hidden="true" />
             </button>
             <span className="photip-header__title">{headerTitle}</span>
           </div>
@@ -83,18 +84,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ eve
             title="Buscar eventos"
             aria-label="Buscar"
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-              <line
-                x1="21"
-                y1="21"
-                x2="16.65"
-                y2="16.65"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
+            <Search size={22} strokeWidth={2} aria-hidden="true" />
           </button>
 
           <button
@@ -104,17 +94,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ eve
             title="Favoritas"
             aria-label="Favoritas"
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M4 6h2l1.6 9.6a2 2 0 0 0 2 1.7h7.6a2 2 0 0 0 2-1.6L20.6 9H7"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <circle cx="10" cy="20" r="1.4" fill="currentColor" />
-              <circle cx="17" cy="20" r="1.4" fill="currentColor" />
-            </svg>
+            <ShoppingCart size={22} strokeWidth={2} aria-hidden="true" />
             {totalFavorites > 0 && (
               <span className="photip-header__fav-badge">{totalFavorites}</span>
             )}
@@ -127,11 +107,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ eve
             title="Menu"
             aria-label="Menu"
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <line x1="4" y1="7" x2="20" y2="7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <line x1="4" y1="17" x2="20" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+            <Menu size={22} strokeWidth={2} aria-hidden="true" />
           </button>
         </div>
       </div>

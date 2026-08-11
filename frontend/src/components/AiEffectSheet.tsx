@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { X } from 'lucide-react';
 import { generatePhotoAiEffect, type AiEffect } from '../api/client';
 import type { Photo } from '../types';
 
@@ -41,7 +42,7 @@ export function AiEffectSheet({ photo, onClose }: AiEffectSheetProps) {
         <div className="ai-effect-sheet__header">
           <span>Efeitos com IA</span>
           <button type="button" className="ai-effect-sheet__close" onClick={onClose} aria-label="Fechar">
-            ×
+            <X size={18} strokeWidth={2.4} aria-hidden="true" />
           </button>
         </div>
 

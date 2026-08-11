@@ -121,7 +121,7 @@
   width: min(78vw, 300px);
   background: #fff;
   z-index: 260;
-  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.14);
+  box-shadow: -8px 0 24px rgba(16, 26, 53, 0.14);
   padding: 22px;
   display: flex;
   flex-direction: column;

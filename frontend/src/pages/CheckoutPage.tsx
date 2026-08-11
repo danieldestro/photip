@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Check } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
 import type { Photo } from '../types';
 
@@ -53,7 +54,9 @@ export function CheckoutPage() {
     return (
       <div className="checkout-page">
         <div className="checkout-page__success photip-card">
-          <div className="checkout-page__check">✓</div>
+          <div className="checkout-page__check">
+            <Check size={28} strokeWidth={3} aria-hidden="true" />
+          </div>
           <h1 className="checkout-page__title">Compra realizada com sucesso!</h1>
           <p className="checkout-page__subtitle">
             {photos.length} {photos.length === 1 ? 'foto' : 'fotos'}

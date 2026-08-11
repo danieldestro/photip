@@ -1,3 +1,5 @@
+import { LayoutGrid, Rows3 } from 'lucide-react';
+
 export type EventsViewMode = 'list' | 'compact';
 
 interface ViewToggleProps {
@@ -18,10 +20,7 @@ export function ViewToggle({ value, onChange }: ViewToggleProps) {
         aria-label="Lista contínua"
         title="Lista contínua"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="5" width="18" height="4.5" rx="1.2" fill="currentColor" />
-          <rect x="3" y="14.5" width="18" height="4.5" rx="1.2" fill="currentColor" />
-        </svg>
+        <Rows3 size={16} strokeWidth={2} aria-hidden="true" />
       </button>
       <button
         type="button"
@@ -31,10 +30,7 @@ export function ViewToggle({ value, onChange }: ViewToggleProps) {
         aria-label="Duas colunas"
         title="Duas colunas"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="5" width="7.5" height="14" rx="1.2" fill="currentColor" />
-          <rect x="13.5" y="5" width="7.5" height="14" rx="1.2" fill="currentColor" />
-        </svg>
+        <LayoutGrid size={16} strokeWidth={2} aria-hidden="true" />
       </button>
     </div>
   );

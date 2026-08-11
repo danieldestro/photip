@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type TouchEvent } from 'react';
+import { ChevronLeft, ChevronRight, Heart, Sparkles, X } from 'lucide-react';
 import type { Photo } from '../types';
 import { AiEffectSheet } from './AiEffectSheet';
 
@@ -128,7 +129,7 @@ export function PhotoViewer({
       <div className="photo-viewer__panel">
         <div className="photo-viewer__top">
           <div className="photo-viewer__fav-count" aria-label={`${favoritesCount} fotos favoritas`}>
-            <span aria-hidden="true">♥</span> {favoritesCount}
+            <Heart size={14} strokeWidth={2.4} fill="currentColor" aria-hidden="true" /> {favoritesCount}
           </div>
 
           <div className="photo-viewer__counter">
@@ -137,7 +138,7 @@ export function PhotoViewer({
         </div>
 
         <button type="button" className="photo-viewer__close" onClick={onClose} aria-label="Fechar">
-          ×
+          <X size={20} strokeWidth={2.4} aria-hidden="true" />
         </button>
 
         <button
@@ -146,7 +147,7 @@ export function PhotoViewer({
           onClick={goPrev}
           aria-label="Foto anterior"
         >
-          ‹
+          <ChevronLeft size={22} strokeWidth={2.4} aria-hidden="true" />
         </button>
 
         <div className="photo-viewer__frame">
@@ -158,7 +159,7 @@ export function PhotoViewer({
             onClick={() => onToggleFavorite(photo.id)}
             aria-label="Favoritar"
           >
-            {isFavorite(photo.id) ? '♥' : '♡'}
+            <Heart size={20} strokeWidth={2.2} fill={isFavorite(photo.id) ? 'currentColor' : 'transparent'} aria-hidden="true" />
           </button>
 
           {aiEnabled && (
@@ -168,7 +169,7 @@ export function PhotoViewer({
               onClick={() => setShowAiSheet(true)}
               aria-label="Gerar efeito com IA"
             >
-              <span aria-hidden="true">✨</span> IA
+              <Sparkles size={14} strokeWidth={2.2} aria-hidden="true" /> IA
             </button>
           )}
         </div>
@@ -179,7 +180,7 @@ export function PhotoViewer({
           onClick={goNext}
           aria-label="Próxima foto"
         >
-          ›
+          <ChevronRight size={22} strokeWidth={2.4} aria-hidden="true" />
         </button>
 
         <div className="photo-viewer__footer">
