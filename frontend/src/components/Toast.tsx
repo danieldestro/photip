@@ -3,5 +3,5 @@ interface ToastProps {
 }
 
 export function Toast({ message }: ToastProps) {
-  return <div className="potof-toast">{message}</div>;
+  return <div className="photip-toast">{message}</div>;
 }

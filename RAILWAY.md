@@ -54,7 +54,7 @@ domínios diferentes; ver `README.md`).
    | Variável | Valor | Observação |
    |---|---|---|
    | `DATABASE_URL` | `${{MySQL.MYSQL_URL}}` | referência direta à connection string que o serviço `MySQL` já expõe via rede privada Railway; confirme que o schema é `mysql://` (Prisma exige) antes do primeiro deploy — se não for, monte manualmente com `mysql://${{MySQL.MYSQLUSER}}:${{MySQL.MYSQLPASSWORD}}@${{MySQL.MYSQLHOST}}:${{MySQL.MYSQLPORT}}/${{MySQL.MYSQLDATABASE}}` |
-   | `NODE_ENV` | `production` | **obrigatório** — sem isso os cookies de sessão (`potof_sid`, `potof_admin_sid`) sobem sem `Secure`, ver `backend/src/routes/eventos.ts` e `routes/admin/auth.ts` |
+   | `NODE_ENV` | `production` | **obrigatório** — sem isso os cookies de sessão (`photip_sid`, `photip_admin_sid`) sobem sem `Secure`, ver `backend/src/routes/eventos.ts` e `routes/admin/auth.ts` |
    | `ADMIN_SESSION_SECRET` | gere com `openssl rand -hex 32` | assina o cookie de sessão do admin |
    | `ADMIN_SEED_EMAIL` | email do primeiro admin | usado pelo seed, que roda sozinho a cada boot (ver seção 3) |
    | `ADMIN_SEED_PASSWORD` | senha forte | idem — marque como *sensitive* |
@@ -69,7 +69,7 @@ domínios diferentes; ver `README.md`).
    Não defina `PORT` — o Railway injeta a própria e o app já lê `process.env.PORT`
    (`backend/src/server.ts`).
 3. Faça o deploy. Depois que ele subir, vá em **Settings → Networking → Generate Domain**
-   para obter a URL pública (ex.: `potof-production.up.railway.app`). Volte em
+   para obter a URL pública (ex.: `photip-production.up.railway.app`). Volte em
    **Variables** e ajuste `FRONTEND_ORIGIN` para essa URL — como front e back estão na
    mesma origem em produção, essa variável não é usada para bloquear nada no caminho
    normal, mas é o valor que `@fastify/cors` espera caso algum dia exista uma origem

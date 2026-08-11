@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { addFavorite, clearEventFavorites, fetchEventFavorites, removeFavorite } from '../api/client';
 
-export const FAVORITES_CHANGED_EVENT = 'potof:favorites-changed';
+export const FAVORITES_CHANGED_EVENT = 'photip:favorites-changed';
 
 export function useFavorites(eventId: string) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());

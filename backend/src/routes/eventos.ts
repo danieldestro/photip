@@ -4,7 +4,7 @@ import type { Evento, Foto } from '@prisma/client';
 import { prisma } from '../db/prisma';
 import { getAdapter } from '../providers/registry';
 import { buildBooleanExpression } from '../lib/fulltextQuery';
-import { getOrSetPotofSessionId } from '../lib/potofSession';
+import { getOrSetPhotipSessionId } from '../lib/photipSession';
 import type { Photo } from '../fotop/photoParser';
 
 const EVENTOS_BUSCA_PAGE_SIZE = 40;
@@ -213,9 +213,9 @@ export async function eventosRoutes(app: FastifyInstance): Promise<void> {
   });
 
   app.post<{ Params: { id: string } }>('/api/eventos/:id/selfie', async (request, reply) => {
-    const sessionId = getOrSetPotofSessionId(request, reply);
+    const sessionId = getOrSetPhotipSessionId(request, reply);
     const id = Number.parseInt(request.params.id, 10);
-    const log = request.log.child({ potofSessionId: sessionId, eventoId: id, route: 'selfie' });
+    const log = request.log.child({ photipSessionId: sessionId, eventoId: id, route: 'selfie' });
 
     const data = await request.file();
     if (!data) {
@@ -264,9 +264,9 @@ export async function eventosRoutes(app: FastifyInstance): Promise<void> {
   });
 
   app.get<{ Params: { id: string } }>('/api/eventos/:id/fotos', async (request, reply) => {
-    const sessionId = getOrSetPotofSessionId(request, reply);
+    const sessionId = getOrSetPhotipSessionId(request, reply);
     const id = Number.parseInt(request.params.id, 10);
-    const log = request.log.child({ potofSessionId: sessionId, eventoId: id, route: 'fotos' });
+    const log = request.log.child({ photipSessionId: sessionId, eventoId: id, route: 'fotos' });
 
     const evento = await prisma.evento.findUnique({ where: { id }, include: { provedor: true } });
     if (!evento || !evento.ativo) {

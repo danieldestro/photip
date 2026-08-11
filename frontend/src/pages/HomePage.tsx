@@ -79,7 +79,7 @@ export function HomePage() {
       </div>
 
       <div className="home-content">
-        <div className="category-pills-wrap potof-card">
+        <div className="category-pills-wrap photip-card">
           <CategoryPills categories={categoryOptions} onSelect={(id) => goExplore(id)} />
         </div>
 
@@ -117,7 +117,7 @@ export function HomePage() {
           <div className="home-more-cta">
             <button
               type="button"
-              className="potof-btn potof-btn--primary"
+              className="photip-btn photip-btn--primary"
               onClick={loadMore}
               disabled={loadingMore}
             >

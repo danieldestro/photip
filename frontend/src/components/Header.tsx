@@ -55,30 +55,30 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ eve
   }
 
   return (
-    <header ref={ref} className="potof-header">
-      <div className="potof-header__row">
-        <div className="potof-header__logo" onClick={() => navigate('/')}>
-          POTOF
+    <header ref={ref} className="photip-header">
+      <div className="photip-header__row">
+        <div className="photip-header__logo" onClick={() => navigate('/')}>
+          PHOTIP
         </div>
 
         {showBack && (
-          <div className="potof-header__back">
+          <div className="photip-header__back">
             <button
               type="button"
-              className="potof-header__back-btn"
+              className="photip-header__back-btn"
               onClick={goBack}
               aria-label="Voltar"
             >
               ‹
             </button>
-            <span className="potof-header__title">{headerTitle}</span>
+            <span className="photip-header__title">{headerTitle}</span>
           </div>
         )}
 
-        <div className="potof-header__actions">
+        <div className="photip-header__actions">
           <button
             type="button"
-            className="potof-header__icon-btn"
+            className="photip-header__icon-btn"
             onClick={() => navigate('/eventos')}
             title="Buscar eventos"
             aria-label="Buscar"
@@ -99,7 +99,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ eve
 
           <button
             type="button"
-            className="potof-header__icon-btn potof-header__fav-btn"
+            className="photip-header__icon-btn photip-header__fav-btn"
             onClick={goFavorites}
             title="Favoritas"
             aria-label="Favoritas"
@@ -116,13 +116,13 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ eve
               <circle cx="17" cy="20" r="1.4" fill="currentColor" />
             </svg>
             {totalFavorites > 0 && (
-              <span className="potof-header__fav-badge">{totalFavorites}</span>
+              <span className="photip-header__fav-badge">{totalFavorites}</span>
             )}
           </button>
 
           <button
             type="button"
-            className="potof-header__icon-btn"
+            className="photip-header__icon-btn"
             onClick={() => setMenuOpen(true)}
             title="Menu"
             aria-label="Menu"

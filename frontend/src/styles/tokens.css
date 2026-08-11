@@ -1,36 +1,36 @@
 :root {
-  --potof-bg: #fbf7f3;
-  --potof-yellow: #ffc000;
-  --potof-yellow-accent: #ffcc00;
-  --potof-yellow-tint: #ffcc004d;
-  --potof-yellow-tint-strong: #ffcc0066;
-  --potof-primary: #595959;
-  --potof-primary-hover: #404040;
-  --potof-text: #241b16;
-  --potof-muted: #8a7a70;
-  --potof-border: #ece3dc;
-  --potof-viewer-bg: #151009;
+  --photip-bg: #fbf7f3;
+  --photip-yellow: #ffc000;
+  --photip-yellow-accent: #ffcc00;
+  --photip-yellow-tint: #ffcc004d;
+  --photip-yellow-tint-strong: #ffcc0066;
+  --photip-primary: #595959;
+  --photip-primary-hover: #404040;
+  --photip-text: #241b16;
+  --photip-muted: #8a7a70;
+  --photip-border: #ece3dc;
+  --photip-viewer-bg: #151009;
 
-  --potof-danger: #c62f2f;
-  --potof-danger-bg: #fdecea;
-  --potof-danger-border: #f3b7ae;
+  --photip-danger: #c62f2f;
+  --photip-danger-bg: #fdecea;
+  --photip-danger-border: #f3b7ae;
 
-  --potof-font-display: 'Archivo Black', 'Arial Black', sans-serif;
-  --potof-font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --photip-font-display: 'Archivo Black', 'Arial Black', sans-serif;
+  --photip-font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
-  --potof-radius-sm: 10px;
-  --potof-radius-md: 14px;
-  --potof-radius-lg: 18px;
+  --photip-radius-sm: 10px;
+  --photip-radius-md: 14px;
+  --photip-radius-lg: 18px;
 
   /* Width of the event page's content column (photo thumbs grid included) — the photo
      viewer popup caps itself to this on large screens instead of stretching edge to edge. */
-  --potof-content-max-width: 900px;
+  --photip-content-max-width: 900px;
 
   /* Visual height of the fixed purchase footer on the event page (excludes the safe-area
      inset, which is added on top wherever this is used for clearance/offsets). */
-  --potof-footer-height: 72px;
+  --photip-footer-height: 72px;
 
   /* Fallback for the fixed app header's height, used only until AppLayout measures the
      real rendered height (which varies with viewport width) and overwrites this. */
-  --potof-header-height: 66px;
+  --photip-header-height: 66px;
 }

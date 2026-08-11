@@ -1,7 +1,7 @@
 # ai-photo-test
 
 Programa standalone para testar a geração de imagens com IA (efeitos de foto) sem
-precisar subir o backend nem o frontend do potof.
+precisar subir o backend nem o frontend do photip.
 
 Reusa diretamente o mecanismo do backend — `backend/src/ai/photoEffects.ts` e
 `backend/src/ai/prompts.json` — então qualquer alteração feita lá (novo efeito, prompt

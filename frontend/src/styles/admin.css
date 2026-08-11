@@ -4,9 +4,9 @@
 .admin-shell {
   display: flex;
   min-height: 100vh;
-  background: var(--potof-bg);
-  font-family: var(--potof-font-body);
-  color: var(--potof-text);
+  background: var(--photip-bg);
+  font-family: var(--photip-font-body);
+  color: var(--photip-text);
 }
 
 .admin-sidebar {
@@ -15,12 +15,12 @@
   display: flex;
   flex-direction: column;
   background: #fff;
-  border-right: 1px solid var(--potof-border);
+  border-right: 1px solid var(--photip-border);
   padding: 24px 16px;
 }
 
 .admin-sidebar__brand {
-  font-family: var(--potof-font-display);
+  font-family: var(--photip-font-display);
   font-size: 1.1rem;
   margin-bottom: 24px;
 }
@@ -34,20 +34,20 @@
 
 .admin-sidebar__link {
   padding: 10px 12px;
-  border-radius: var(--potof-radius-sm);
-  color: var(--potof-primary);
+  border-radius: var(--photip-radius-sm);
+  color: var(--photip-primary);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95rem;
 }
 
 .admin-sidebar__link:hover {
-  background: var(--potof-yellow-tint);
+  background: var(--photip-yellow-tint);
 }
 
 .admin-sidebar__link--active {
-  background: var(--potof-yellow-tint-strong);
-  color: var(--potof-text);
+  background: var(--photip-yellow-tint-strong);
+  color: var(--photip-text);
 }
 
 .admin-sidebar__footer {
@@ -56,12 +56,12 @@
   justify-content: space-between;
   gap: 8px;
   padding-top: 16px;
-  border-top: 1px solid var(--potof-border);
+  border-top: 1px solid var(--photip-border);
 }
 
 .admin-sidebar__user {
   font-size: 0.85rem;
-  color: var(--potof-muted);
+  color: var(--photip-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -70,7 +70,7 @@
 .admin-sidebar__version {
   padding-top: 8px;
   font-size: 0.75rem;
-  color: var(--potof-muted);
+  color: var(--photip-muted);
 }
 
 .admin-content {
@@ -81,7 +81,7 @@
 
 .admin-loading {
   padding: 32px;
-  color: var(--potof-muted);
+  color: var(--photip-muted);
 }
 
 .admin-page__header {
@@ -92,7 +92,7 @@
 }
 
 .admin-page__header h1 {
-  font-family: var(--potof-font-display);
+  font-family: var(--photip-font-display);
   font-size: 1.4rem;
   margin: 0;
 }
@@ -109,8 +109,8 @@
   width: 100%;
   max-width: 360px;
   padding: 10px 12px;
-  border-radius: var(--potof-radius-sm);
-  border: 1px solid var(--potof-border);
+  border-radius: var(--photip-radius-sm);
+  border: 1px solid var(--photip-border);
   font-family: inherit;
   font-size: 0.95rem;
 }
@@ -123,18 +123,18 @@
 
 .admin-filters select {
   padding: 9px 10px;
-  border-radius: var(--potof-radius-sm);
-  border: 1px solid var(--potof-border);
+  border-radius: var(--photip-radius-sm);
+  border: 1px solid var(--photip-border);
   font-family: inherit;
   font-size: 0.9rem;
-  color: var(--potof-text);
+  color: var(--photip-text);
   background: #fff;
 }
 
 .admin-table-wrap {
   overflow-x: auto;
-  border: 1px solid var(--potof-border);
-  border-radius: var(--potof-radius-md);
+  border: 1px solid var(--photip-border);
+  border-radius: var(--photip-radius-md);
   background: #fff;
 }
 
@@ -148,12 +148,12 @@
 .admin-table td {
   text-align: left;
   padding: 10px 14px;
-  border-bottom: 1px solid var(--potof-border);
+  border-bottom: 1px solid var(--photip-border);
   white-space: nowrap;
 }
 
 .admin-table th {
-  background: var(--potof-bg);
+  background: var(--photip-bg);
   font-weight: 700;
 }
 
@@ -179,7 +179,7 @@
   width: 48px;
   height: 48px;
   object-fit: cover;
-  border-radius: var(--potof-radius-sm);
+  border-radius: var(--photip-radius-sm);
   display: block;
 }
 
@@ -189,15 +189,15 @@
   gap: 12px;
   margin-top: 16px;
   font-size: 0.9rem;
-  color: var(--potof-muted);
+  color: var(--photip-muted);
 }
 
 .admin-btn {
   padding: 8px 16px;
-  border-radius: var(--potof-radius-sm);
-  border: 1px solid var(--potof-border);
+  border-radius: var(--photip-radius-sm);
+  border: 1px solid var(--photip-border);
   background: #fff;
-  color: var(--potof-text);
+  color: var(--photip-text);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -209,9 +209,9 @@
 }
 
 .admin-btn--primary {
-  background: var(--potof-yellow);
-  border-color: var(--potof-yellow);
-  color: var(--potof-text);
+  background: var(--photip-yellow);
+  border-color: var(--photip-yellow);
+  color: var(--photip-text);
 }
 
 .admin-btn--ghost {
@@ -233,7 +233,7 @@
 }
 
 .admin-btn--icon.is-syncing svg {
-  animation: potof-spin 0.9s linear infinite;
+  animation: photip-spin 0.9s linear infinite;
 }
 
 .admin-badge {
@@ -251,8 +251,8 @@
 }
 
 .admin-badge--off {
-  background: var(--potof-danger-bg);
-  color: var(--potof-danger);
+  background: var(--photip-danger-bg);
+  color: var(--photip-danger);
 }
 
 .admin-status-badge {
@@ -269,12 +269,12 @@
 }
 
 .admin-status-badge--erro {
-  background: var(--potof-danger-bg);
-  color: var(--potof-danger);
+  background: var(--photip-danger-bg);
+  color: var(--photip-danger);
 }
 
 .admin-status-badge--em_andamento {
-  background: var(--potof-yellow-tint);
+  background: var(--photip-yellow-tint);
   color: #7a5b00;
 }
 
@@ -292,14 +292,14 @@
 
 .admin-modal__card {
   background: #fff;
-  border-radius: var(--potof-radius-lg);
+  border-radius: var(--photip-radius-lg);
   padding: 24px;
   width: 100%;
   max-width: 480px;
 }
 
 .admin-modal__card h2 {
-  font-family: var(--potof-font-display);
+  font-family: var(--photip-font-display);
   font-size: 1.15rem;
   margin: 0 0 16px;
 }
@@ -311,7 +311,7 @@
   margin-bottom: 14px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--potof-primary);
+  color: var(--photip-primary);
 }
 
 .admin-form__field input[type='text'],
@@ -323,11 +323,11 @@
 .admin-form__field textarea,
 .admin-form__field select {
   padding: 9px 10px;
-  border-radius: var(--potof-radius-sm);
-  border: 1px solid var(--potof-border);
+  border-radius: var(--photip-radius-sm);
+  border: 1px solid var(--photip-border);
   font-family: inherit;
   font-size: 0.9rem;
-  color: var(--potof-text);
+  color: var(--photip-text);
 }
 
 .admin-form__field input[type='checkbox'] {
@@ -337,7 +337,7 @@
 }
 
 .admin-form__error {
-  color: var(--potof-danger);
+  color: var(--photip-danger);
   font-size: 0.85rem;
   margin: 8px 0;
 }
@@ -355,7 +355,7 @@
 
 .admin-settings-form__hint {
   font-size: 0.85rem;
-  color: var(--potof-muted);
+  color: var(--photip-muted);
 }
 
 .admin-login {
@@ -363,12 +363,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--potof-bg);
+  background: var(--photip-bg);
 }
 
 .admin-login__card {
   background: #fff;
-  border-radius: var(--potof-radius-lg);
+  border-radius: var(--photip-radius-lg);
   padding: 32px;
   width: 100%;
   max-width: 340px;
@@ -376,14 +376,14 @@
 }
 
 .admin-login__card h1 {
-  font-family: var(--potof-font-display);
+  font-family: var(--photip-font-display);
   font-size: 1.3rem;
   margin: 0 0 20px;
   text-align: center;
 }
 
 .admin-login__error {
-  color: var(--potof-danger);
+  color: var(--photip-danger);
   font-size: 0.85rem;
   margin: 4px 0 12px;
 }

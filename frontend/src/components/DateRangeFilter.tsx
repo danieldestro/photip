@@ -55,7 +55,7 @@ export function DateRangeFilter({ onChange }: DateRangeFilterProps) {
     <div className="date-filter" onBlur={handleBlur}>
       <button
         type="button"
-        className="potof-pill-select date-filter__trigger"
+        className="photip-pill-select date-filter__trigger"
         onClick={() => setOpen((o) => !o)}
       >
         {triggerLabel}
@@ -117,7 +117,7 @@ export function DateRangeFilter({ onChange }: DateRangeFilterProps) {
               </label>
               <button
                 type="button"
-                className="potof-btn potof-btn--primary date-filter__apply"
+                className="photip-btn photip-btn--primary date-filter__apply"
                 disabled={!customStart || !customEnd}
                 onClick={handleApplyCustom}
               >

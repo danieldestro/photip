@@ -10,9 +10,9 @@ services:
     # silenciosamente entre dev e prod (ver RAILWAY.md).
     command: --innodb-ft-min-token-size=2
     environment:
-      MYSQL_DATABASE: potof
-      MYSQL_USER: potof
-      MYSQL_PASSWORD: potof
+      MYSQL_DATABASE: photip
+      MYSQL_USER: photip
+      MYSQL_PASSWORD: photip
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"

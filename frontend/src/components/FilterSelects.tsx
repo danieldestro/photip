@@ -29,7 +29,7 @@ export function FilterSelects({
   return (
     <div className="filter-selects">
       <select
-        className="potof-pill-select"
+        className="photip-pill-select"
         value={categoryFilter}
         onChange={(e) => onCategoryChange(e.target.value)}
       >
@@ -41,7 +41,7 @@ export function FilterSelects({
         ))}
       </select>
       <select
-        className="potof-pill-select"
+        className="photip-pill-select"
         value={stateFilter}
         onChange={(e) => onStateChange(e.target.value)}
       >
@@ -53,7 +53,7 @@ export function FilterSelects({
         ))}
       </select>
       <select
-        className="potof-pill-select"
+        className="photip-pill-select"
         value={providerFilter}
         onChange={(e) => onProviderChange(e.target.value)}
       >

@@ -134,8 +134,8 @@ export function FavoritesPage() {
   return (
     <div className={`favorites-page${favoritePhotos.length > 0 ? ' favorites-page--with-footer' : ''}`}>
       {headerInfo?.name && (
-        <div className="evento-hero potof-card">
-          {categoryLabel && <span className="potof-badge">{categoryLabel}</span>}
+        <div className="evento-hero photip-card">
+          {categoryLabel && <span className="photip-badge">{categoryLabel}</span>}
           <h1 className="evento-hero__title">{headerInfo.name}</h1>
           {(locationLabel || dateLabel || headerInfo.photosCount != null) && (
             <div className="evento-hero__meta">
@@ -166,7 +166,7 @@ export function FavoritesPage() {
           <p>Sua sessão de busca expirou. Busque suas fotos novamente para ver suas favoritas.</p>
           <button
             type="button"
-            className="potof-btn potof-btn--primary"
+            className="photip-btn photip-btn--primary"
             onClick={() => navigate(`/evento/${eventId}`)}
           >
             Buscar minhas fotos
@@ -179,7 +179,7 @@ export function FavoritesPage() {
           <p>Você ainda não tem fotos favoritas neste evento.</p>
           <button
             type="button"
-            className="potof-btn potof-btn--primary"
+            className="photip-btn photip-btn--primary"
             onClick={() => navigate(`/evento/${eventId}`)}
           >
             Ver fotos do evento
@@ -220,7 +220,7 @@ export function FavoritesPage() {
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                     <path
                       d="M5 5l14 14M19 5L5 19"
-                      stroke="var(--potof-danger)"
+                      stroke="var(--photip-danger)"
                       strokeWidth="3.5"
                       strokeLinecap="round"
                     />

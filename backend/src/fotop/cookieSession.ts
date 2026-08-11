@@ -9,15 +9,15 @@ const SESSION_TTL_MS = 60 * 60 * 1000;
 
 const sessions = new Map<string, SessionEntry>();
 
-export function getOrCreateJar(potofSessionId: string): CookieJar {
-  const existing = sessions.get(potofSessionId);
+export function getOrCreateJar(photipSessionId: string): CookieJar {
+  const existing = sessions.get(photipSessionId);
   if (existing) {
     existing.lastUsed = Date.now();
     return existing.jar;
   }
 
   const jar = new CookieJar();
-  sessions.set(potofSessionId, { jar, lastUsed: Date.now() });
+  sessions.set(photipSessionId, { jar, lastUsed: Date.now() });
   return jar;
 }
 

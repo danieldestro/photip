@@ -25,8 +25,8 @@ async function main(): Promise<void> {
     origin: FRONTEND_ORIGIN,
     credentials: true,
   });
-  // secret enables signed cookies for the admin session (potof_admin_sid);
-  // the public potof_sid cookie stays unsigned, same as before.
+  // secret enables signed cookies for the admin session (photip_admin_sid);
+  // the public photip_sid cookie stays unsigned, same as before.
   await app.register(cookie, { secret: process.env.ADMIN_SESSION_SECRET });
   await app.register(multipart, {
     limits: { fileSize: 10 * 1024 * 1024 },
@@ -44,7 +44,7 @@ async function main(): Promise<void> {
 
   // Em produção, backend e frontend rodam no mesmo processo/origem (o build do Vite é
   // servido diretamente daqui), evitando os problemas de cookie cross-site que o
-  // SameSite=Lax de potof_sid teria se front e back ficassem em domínios diferentes.
+  // SameSite=Lax de photip_sid teria se front e back ficassem em domínios diferentes.
   if (existsSync(FRONTEND_DIST)) {
     await app.register(fastifyStatic, { root: FRONTEND_DIST });
 

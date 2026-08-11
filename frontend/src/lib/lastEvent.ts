@@ -1,4 +1,4 @@
-const LAST_EVENT_KEY = 'potof:lastEventId';
+const LAST_EVENT_KEY = 'photip:lastEventId';
 
 export function getLastEventId(): string | null {
   return localStorage.getItem(LAST_EVENT_KEY);

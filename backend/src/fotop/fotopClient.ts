@@ -46,18 +46,18 @@ function buildClient(jar: CookieJar): AxiosInstance {
 }
 
 export async function ensureEventSession(
-  potofSessionId: string,
+  photipSessionId: string,
   eventId: string,
   logger: FastifyBaseLogger = noopLogger
 ): Promise<string> {
-  const jar = getOrCreateJar(potofSessionId);
+  const jar = getOrCreateJar(photipSessionId);
   const client = buildClient(jar);
   const res = await client.get('/fotos/eventos', { params: { evento: eventId } });
   const html = typeof res.data === 'string' ? res.data : '';
 
   logger.info(
     {
-      potofSessionId,
+      photipSessionId,
       eventId,
       status: res.status,
       finalUrl: res.request?.res?.responseUrl,
@@ -75,12 +75,12 @@ export async function ensureEventSession(
 }
 
 export async function fetchSearchResultsHtml(
-  potofSessionId: string,
+  photipSessionId: string,
   eventId: string,
   page: number,
   logger: FastifyBaseLogger = noopLogger
 ): Promise<string> {
-  const jar = getOrCreateJar(potofSessionId);
+  const jar = getOrCreateJar(photipSessionId);
   const client = buildClient(jar);
   const url = `/fotos/eventos/busca/evento/${eventId}/rc/${page}`;
   const res = await client.get(url);
@@ -88,7 +88,7 @@ export async function fetchSearchResultsHtml(
 
   logger.info(
     {
-      potofSessionId,
+      photipSessionId,
       eventId,
       page,
       status: res.status,
@@ -124,7 +124,7 @@ export interface FotopEventoRaw {
 }
 
 // This endpoint is public and stateless (confirmed: works with no cookies at all), unlike the
-// rest of fotopClient which threads a per-potof-session cookie jar through an event's own
+// rest of fotopClient which threads a per-photip-session cookie jar through an event's own
 // face-search flow — so it uses a plain one-off request instead of buildClient/getOrCreateJar.
 export interface FetchEventosBuscaParams {
   page: number;
@@ -183,12 +183,12 @@ export interface SelfieSearchResult {
 }
 
 export async function sendSelfie(
-  potofSessionId: string,
+  photipSessionId: string,
   eventId: string,
   file: { buffer: Buffer; filename: string; mimeType: string },
   logger: FastifyBaseLogger = noopLogger
 ): Promise<SelfieSearchResult> {
-  const jar = getOrCreateJar(potofSessionId);
+  const jar = getOrCreateJar(photipSessionId);
   const client = buildClient(jar);
 
   // Field names and empty crop values mirror the real #formReconhecimento markup on
@@ -209,7 +209,7 @@ export async function sendSelfie(
   });
 
   logger.info(
-    { potofSessionId, eventId, filename: file.filename, mimeType: file.mimeType, sizeBytes: file.buffer.length },
+    { photipSessionId, eventId, filename: file.filename, mimeType: file.mimeType, sizeBytes: file.buffer.length },
     'fotop: sending selfie to salva-face'
   );
 
@@ -220,7 +220,7 @@ export async function sendSelfie(
   const success = res.status >= 200 && res.status < 300;
 
   logger.info(
-    { potofSessionId, eventId, status: res.status, success, contentType: res.headers['content-type'], body: preview(res.data) },
+    { photipSessionId, eventId, status: res.status, success, contentType: res.headers['content-type'], body: preview(res.data) },
     'fotop: salva-face response'
   );
 

@@ -29,7 +29,7 @@ export function LoginPage() {
   return (
     <div className="admin-login">
       <form className="admin-login__card" onSubmit={handleSubmit}>
-        <h1>potof admin</h1>
+        <h1>photip admin</h1>
         <label className="admin-form__field">
           Email
           <input

@@ -122,7 +122,7 @@ export function ExplorePage() {
         <div className="home-more-cta">
           <button
             type="button"
-            className="potof-btn potof-btn--primary"
+            className="photip-btn photip-btn--primary"
             onClick={loadMore}
             disabled={loadingMore}
           >
