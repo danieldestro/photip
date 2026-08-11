@@ -180,7 +180,7 @@
 .evento-loading__spinner {
   width: 44px;
   height: 44px;
-  border: 4px solid #e5e5e5;
+  border: 4px solid var(--photip-border);
   border-top-color: var(--photip-primary);
   border-radius: 50%;
   margin: 0 auto 20px;
@@ -265,7 +265,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: rgba(36, 27, 22, 0.45);
+  background: rgba(16, 26, 53, 0.45);
   border: none;
   display: flex;
   align-items: center;

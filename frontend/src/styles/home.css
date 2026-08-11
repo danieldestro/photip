@@ -59,7 +59,7 @@
 }
 
 .home-hero__search > button:hover {
-  background: #e6b800;
+  background: var(--photip-yellow-accent-hover);
 }
 
 .home-hero__hint {
@@ -293,7 +293,7 @@
 .home-view-toggle__btn--active {
   background: #fff;
   color: var(--photip-primary);
-  box-shadow: 0 2px 6px rgba(36, 27, 22, 0.12);
+  box-shadow: 0 2px 6px rgba(16, 26, 53, 0.12);
 }
 
 .filter-selects {

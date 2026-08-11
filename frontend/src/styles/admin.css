@@ -246,8 +246,8 @@
 }
 
 .admin-badge--on {
-  background: #e3f4e3;
-  color: #276b27;
+  background: var(--photip-success-bg);
+  color: var(--photip-success);
 }
 
 .admin-badge--off {
@@ -264,8 +264,8 @@
 }
 
 .admin-status-badge--sucesso {
-  background: #e3f4e3;
-  color: #276b27;
+  background: var(--photip-success-bg);
+  color: var(--photip-success);
 }
 
 .admin-status-badge--erro {
@@ -275,13 +275,13 @@
 
 .admin-status-badge--em_andamento {
   background: var(--photip-yellow-tint);
-  color: #7a5b00;
+  color: var(--photip-primary);
 }
 
 .admin-modal__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(21, 16, 9, 0.4);
+  background: rgba(16, 26, 53, 0.4);
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -372,7 +372,7 @@
   padding: 32px;
   width: 100%;
   max-width: 340px;
-  box-shadow: 0 8px 24px rgba(36, 27, 22, 0.08);
+  box-shadow: 0 8px 24px rgba(16, 26, 53, 0.08);
 }
 
 .admin-login__card h1 {

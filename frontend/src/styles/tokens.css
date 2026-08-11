@@ -1,22 +1,36 @@
 :root {
-  --photip-bg: #fbf7f3;
-  --photip-yellow: #ffc000;
-  --photip-yellow-accent: #ffcc00;
-  --photip-yellow-tint: #ffcc004d;
-  --photip-yellow-tint-strong: #ffcc0066;
-  --photip-primary: #595959;
-  --photip-primary-hover: #404040;
-  --photip-text: #241b16;
-  --photip-muted: #8a7a70;
-  --photip-border: #ece3dc;
-  --photip-viewer-bg: #151009;
+  /* photip design system — https://... (design-system-photip.md) */
+  --photip-bg: #f8fafc;
+  --photip-yellow: #06b6d4;
+  --photip-yellow-accent: #06b6d4;
+  --photip-yellow-accent-hover: #0891b2;
+  --photip-yellow-tint: #06b6d44d;
+  --photip-yellow-tint-strong: #06b6d466;
+  --photip-primary: #101a35;
+  --photip-primary-hover: #0a1226;
+  --photip-text: #101a35;
+  --photip-muted: #64748b;
+  --photip-border: #e2e8f0;
+  --photip-viewer-bg: #101a35;
 
-  --photip-danger: #c62f2f;
-  --photip-danger-bg: #fdecea;
-  --photip-danger-border: #f3b7ae;
+  /* Extra brand tokens (design-system-photip.md §5) — not all wired into components yet,
+     kept available for premium/AI-related features and future work. */
+  --photip-secondary: #14d6c5;
+  --photip-accent: #6366f1;
 
-  --photip-font-display: 'Archivo Black', 'Arial Black', sans-serif;
-  --photip-font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Semantic tokens — never reuse brand colors directly for status. */
+  --photip-danger: #dc2626;
+  --photip-danger-bg: #fef2f2;
+  --photip-danger-border: #fca5a5;
+  --photip-success: #16a34a;
+  --photip-success-bg: #f0fdf4;
+  --photip-warning: #f59e0b;
+  --photip-warning-bg: #fffbeb;
+  --photip-info: #0284c7;
+  --photip-info-bg: #f0f9ff;
+
+  --photip-font-display: 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --photip-font-body: 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --photip-radius-sm: 10px;
   --photip-radius-md: 14px;
