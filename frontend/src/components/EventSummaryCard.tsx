@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { EventSummary } from '../types';
 import { useCategorias } from '../hooks/useCategorias';
@@ -8,9 +9,15 @@ import { CalendarIcon, PinIcon } from './icons';
 
 interface EventSummaryCardProps {
   event: EventSummary;
+  // Overrides the default `/evento/:id` target — e.g. AllFavoritesPage links
+  // straight into that event's favoritas instead of its photo search.
+  to?: string;
+  // Extra badge rendered alongside the category/provider ones — e.g. a
+  // favorited-photos count.
+  extraBadge?: ReactNode;
 }
 
-export function EventSummaryCard({ event }: EventSummaryCardProps) {
+export function EventSummaryCard({ event, to, extraBadge }: EventSummaryCardProps) {
   const navigate = useNavigate();
   const { categorias } = useCategorias();
   const dateLabel = formatDateLabel(event.date);
@@ -18,7 +25,7 @@ export function EventSummaryCard({ event }: EventSummaryCardProps) {
   return (
     <div
       className="event-card photip-card"
-      onClick={() => navigate(`/evento/${event.id}`, { state: { event } })}
+      onClick={() => navigate(to ?? `/evento/${event.id}`, { state: { event } })}
     >
       <div className="event-card__cover event-card__cover--photo">
         {event.coverUrl && (
@@ -36,6 +43,7 @@ export function EventSummaryCard({ event }: EventSummaryCardProps) {
         <div className="event-card__badges">
           <span className="photip-badge">{getCategoriaLabel(categorias, event.categoryId)}</span>
           <ProviderBadge slug={event.providerSlug} />
+          {extraBadge}
         </div>
         <h3 className="event-card__name">{event.name}</h3>
         <div className="event-card__meta">

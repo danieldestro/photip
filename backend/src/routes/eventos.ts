@@ -15,13 +15,13 @@ const AUTOCOMPLETE_LIMIT = 8;
 // (com relevância) quanto pelo autocomplete.
 const FULLTEXT_MATCH = Prisma.sql`MATCH(nome, local, cidade, uf, descricao)`;
 
-const EVENTO_SUMMARY_INCLUDE = {
+export const EVENTO_SUMMARY_INCLUDE = {
   fotos: { where: { ativo: true }, take: 1, orderBy: { id: 'asc' as const } },
   _count: { select: { fotos: { where: { ativo: true } } } },
   provedor: { select: { slug: true } },
 } satisfies Prisma.EventoInclude;
 
-function mapEventoToSummary(
+export function mapEventoToSummary(
   evento: Evento & { fotos: Foto[]; _count: { fotos: number }; provedor: { slug: string } }
 ) {
   const primeiraFoto = evento.fotos[0];

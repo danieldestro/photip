@@ -3,7 +3,6 @@ import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Menu, Search, ShoppingCart } from 'lucide-react';
 import { FAVORITES_CHANGED_EVENT } from '../hooks/useFavorites';
 import { fetchTotalFavoritesCount } from '../api/client';
-import { getLastEventId } from '../lib/lastEvent';
 import { Logo } from './Logo';
 import { NavDrawer } from './NavDrawer';
 
@@ -52,8 +51,8 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ eve
   }
 
   function goFavorites() {
-    const eventId = currentEventId ?? getLastEventId();
-    if (eventId) navigate(`/evento/${eventId}/favoritas`);
+    if (currentEventId) navigate(`/evento/${currentEventId}/favoritas`);
+    else navigate('/favoritas');
   }
 
   return (

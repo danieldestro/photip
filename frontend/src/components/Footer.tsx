@@ -63,7 +63,7 @@ export function Footer() {
           <Link to="/eventos" className="photip-footer__link">
             Eventos
           </Link>
-          <Link to="/evento/favoritas" className="photip-footer__link">
+          <Link to="/favoritas" className="photip-footer__link">
             Favoritas
           </Link>
         </nav>

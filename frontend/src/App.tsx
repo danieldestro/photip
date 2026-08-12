@@ -4,7 +4,7 @@ import { HomePage } from './pages/HomePage';
 import { ExplorePage } from './pages/ExplorePage';
 import { EventoPage } from './pages/EventoPage';
 import { FavoritesPage } from './pages/FavoritesPage';
-import { FavoritasRedirect } from './pages/FavoritasRedirect';
+import { AllFavoritesPage } from './pages/AllFavoritesPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { LegalPage } from './pages/LegalPage';
 import { AdminAuthProvider } from './admin/AdminAuthContext';
@@ -26,7 +26,7 @@ export function App() {
         <Route element={<AppLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/eventos" element={<ExplorePage />} />
-          <Route path="/evento/favoritas" element={<FavoritasRedirect />} />
+          <Route path="/favoritas" element={<AllFavoritesPage />} />
           <Route path="/evento/:eventId" element={<EventoPage />} />
           <Route path="/evento/:eventId/favoritas" element={<FavoritesPage />} />
           <Route path="/evento/:eventId/checkout" element={<CheckoutPage />} />

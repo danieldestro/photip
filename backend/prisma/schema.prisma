@@ -219,6 +219,7 @@ model Usuario {
   updatedAt      DateTime  @updatedAt @map("updated_at")
 
   fotografo Fotografo?
+  favoritos Favorito[]
 
   @@map("usuarios")
 }
@@ -252,22 +253,43 @@ model Foto {
   @@map("fotos")
 }
 
-// Favoritos de fotos por sessão anônima (cookie photip_sid — ver lib/photipSession.ts).
-// fotoId é string livre SEM FK pra Foto: eventos de provedor externo (proprio=false)
-// não persistem fotos localmente (GET /api/eventos/:id/fotos busca ao vivo via adapter),
-// então o id favoritado pode ser um Foto.id local (como string) ou um id de foto do
-// provedor externo — nunca dá pra garantir uma FK única pros dois casos.
+// Vínculo sessão↔evento (cookie photip_sid — ver lib/photipSession.ts) — as fotos
+// favoritadas em si vivem em FavoritoFoto. usuarioId é nullable: não há login público
+// hoje, a coluna só deixa a linha pronta pra quando um usuário autenticado existir.
+// expirou não tem nenhuma rotina que a altere ainda — só é respeitada na leitura
+// (telas de favoritos só mostram registros com expirou=false).
 model Favorito {
-  id              Int      @id @default(autoincrement())
-  photipSessionId String   @map("photip_session_id") @db.VarChar(36)
-  eventoId        Int      @map("evento_id")
-  evento          Evento   @relation(fields: [eventoId], references: [id])
-  fotoId          String   @map("foto_id") @db.VarChar(200)
-  createdAt       DateTime @default(now()) @map("created_at")
+  id        Int      @id @default(autoincrement())
+  sessionId String   @map("session_id") @db.VarChar(36)
+  eventoId  Int      @map("evento_id")
+  evento    Evento   @relation(fields: [eventoId], references: [id])
+  usuarioId Int?     @map("usuario_id")
+  usuario   Usuario? @relation(fields: [usuarioId], references: [id])
+  expirou   Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  fotos FavoritoFoto[]
+
+  // Um vínculo sessão↔evento só — não apagado quando a última foto é removida
+  // (ver DELETE /api/eventos/:id/favoritos* em routes/favoritos.ts).
+  @@unique([sessionId, eventoId])
+  @@index([usuarioId])
+  @@map("favoritos")
+}
+
+// Fotos favoritadas de um evento, uma linha por foto. fotoId é string livre SEM FK
+// pra Foto: eventos de provedor externo (proprio=false) não persistem fotos localmente
+// (GET /api/eventos/:id/fotos busca ao vivo via adapter), então o id favoritado pode
+// ser um Foto.id local (como string) ou um id de foto do provedor externo — nunca dá
+// pra garantir uma FK única pros dois casos.
+model FavoritoFoto {
+  id         Int      @id @default(autoincrement())
+  favoritoId Int      @map("favorito_id")
+  favorito   Favorito @relation(fields: [favoritoId], references: [id], onDelete: Cascade)
+  fotoId     String   @map("foto_id") @db.VarChar(200)
+  createdAt  DateTime @default(now()) @map("created_at")
 
   // Idempotência: favoritar 2x a mesma foto (double-click, retry de rede) não duplica linha.
-  @@unique([photipSessionId, eventoId, fotoId])
-  // Cobre a listagem por evento e, como prefixo, a contagem agregada por sessão.
-  @@index([photipSessionId, eventoId])
-  @@map("favoritos")
+  @@unique([favoritoId, fotoId])
+  @@map("favoritos_fotos")
 }
