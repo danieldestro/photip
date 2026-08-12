@@ -20,9 +20,20 @@
 }
 
 .admin-sidebar__brand {
-  font-family: var(--photip-font-display);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
   font-size: 1.1rem;
   margin-bottom: 24px;
+}
+
+.admin-sidebar__brand-label {
+  font-family: var(--photip-font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--photip-muted);
 }
 
 .admin-sidebar__nav {
@@ -375,11 +386,22 @@
   box-shadow: 0 8px 24px rgba(16, 26, 53, 0.08);
 }
 
-.admin-login__card h1 {
-  font-family: var(--photip-font-display);
-  font-size: 1.3rem;
+.admin-login__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 1.5rem;
   margin: 0 0 20px;
-  text-align: center;
+}
+
+.admin-login__brand-label {
+  font-family: var(--photip-font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--photip-muted);
 }
 
 .admin-login__error {

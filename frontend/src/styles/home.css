@@ -3,7 +3,7 @@
 }
 
 .home-hero {
-  padding: clamp(24px, 6vw, 44px) clamp(16px, 4vw, 32px) clamp(40px, 8vw, 56px);
+  padding: clamp(20px, 3vw, 26px) clamp(16px, 3.6vw, 28px) clamp(22px, 3.6vw, 28px);
   background-color: var(--photip-primary);
 }
 
@@ -15,10 +15,10 @@
 
 .home-hero__inner h1 {
   color: #fff;
-  font-size: clamp(22px, 5vw, 32px);
+  font-size: clamp(20px, 3.2vw, 25px);
   font-weight: 800;
   line-height: 1.25;
-  margin: 0 0 18px;
+  margin: 0 0 14px;
 }
 
 .home-hero__search {
@@ -65,7 +65,7 @@
 .home-hero__hint {
   color: rgba(255, 255, 255, 0.9);
   font-size: 13px;
-  margin: 14px 0 0;
+  margin: 10px 0 0;
 }
 
 .home-hero__hint a {
@@ -130,7 +130,7 @@
 
 .home-content {
   max-width: 1200px;
-  margin: -28px auto 0;
+  margin: -18px auto 0;
   padding: 0 clamp(16px, 4vw, 32px) 60px;
   position: relative;
 }

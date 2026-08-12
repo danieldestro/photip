@@ -110,6 +110,16 @@ button {
   background: var(--photip-yellow-tint-strong);
 }
 
+/* /public/logo.png — user-supplied artwork, cropped to its content bounds. It's a
+   glow-on-transparent piece, designed to sit on dark/black surfaces; on light or cyan
+   ones the wordmark itself reads faint (only the smile+dot glow stays fully legible).
+   Sized in em so each placement's own font-size controls scale. */
+.photip-logo {
+  display: block;
+  height: 2em;
+  width: auto;
+}
+
 .provider-badge {
   display: inline-flex;
   align-self: flex-start;

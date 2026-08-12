@@ -4,6 +4,7 @@ import { ChevronLeft, Menu, Search, ShoppingCart } from 'lucide-react';
 import { FAVORITES_CHANGED_EVENT } from '../hooks/useFavorites';
 import { fetchTotalFavoritesCount } from '../api/client';
 import { getLastEventId } from '../lib/lastEvent';
+import { Logo } from './Logo';
 import { NavDrawer } from './NavDrawer';
 
 interface HeaderProps {
@@ -59,7 +60,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ eve
     <header ref={ref} className="photip-header">
       <div className="photip-header__row">
         <div className="photip-header__logo" onClick={() => navigate('/')}>
-          PHOTIP
+          <Logo />
         </div>
 
         {showBack && (

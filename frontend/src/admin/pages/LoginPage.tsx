@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Navigate } from 'react-router-dom';
+import { Logo } from '../../components/Logo';
 import { useAdminAuth } from '../AdminAuthContext';
 
 export function LoginPage() {
@@ -29,7 +30,10 @@ export function LoginPage() {
   return (
     <div className="admin-login">
       <form className="admin-login__card" onSubmit={handleSubmit}>
-        <h1>photip admin</h1>
+        <h1 className="admin-login__brand">
+          <Logo />
+          <span className="admin-login__brand-label">admin</span>
+        </h1>
         <label className="admin-form__field">
           Email
           <input

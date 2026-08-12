@@ -69,7 +69,7 @@ export function HomePage() {
     <div className="home-page">
       <div className="home-hero">
         <div className="home-hero__inner">
-          <h1>Busque suas fotos nos eventos</h1>
+          <h1>Encontre seus melhores momentos</h1>
           <EventNameAutocomplete estado={toApiFilter(stateFilter)} />
           <p className="home-hero__hint">
             <a href="#" onClick={(e) => { e.preventDefault(); goExplore(); }}>Clique aqui</a>
