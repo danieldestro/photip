@@ -22,6 +22,15 @@ a selfie para `salva-face`, busca a página de resultados e faz o parsing do HTM
 ```bash
 npm install
 
+# configure as variáveis de ambiente do backend (DATABASE_URL etc.)
+cp backend/.env.example backend/.env
+
+# suba o banco MySQL local (docker compose) e rode as migrations + seed do Prisma
+docker compose up -d mysql
+npm run prisma:generate --workspace backend
+npm run prisma:migrate --workspace backend
+npm run prisma:seed --workspace backend
+
 # terminal 1
 npm run dev:backend   # http://localhost:4000
 

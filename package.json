@@ -15,5 +15,12 @@
     "dev:frontend": "npm run dev --workspace frontend",
     "build": "npm run build --workspace backend && npm run build --workspace frontend",
     "start": "npm run start --workspace backend"
+  },
+  "dependencies": {
+    "prisma": "^7.9.1"
+  },
+  "allowScripts": {
+    "prisma@6.19.2": true,
+    "prisma@7.9.1": true
   }
 }
