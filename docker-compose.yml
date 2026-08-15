@@ -18,6 +18,10 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      # Roda na primeira inicialização do volume: concede ao usuário photip
+      # permissão de criar bancos (necessário pro shadow database do Prisma
+      # Migrate — P3014/P1010). Ver docker/mysql/init.sql.
+      - ./docker/mysql:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
       interval: 5s
