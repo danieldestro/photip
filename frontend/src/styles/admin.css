@@ -20,9 +20,20 @@
 }
 
 .admin-sidebar__brand {
-  font-family: var(--photip-font-display);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
   font-size: 1.1rem;
   margin-bottom: 24px;
+}
+
+.admin-sidebar__brand-label {
+  font-family: var(--photip-font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--photip-muted);
 }
 
 .admin-sidebar__nav {
@@ -246,8 +257,8 @@
 }
 
 .admin-badge--on {
-  background: #e3f4e3;
-  color: #276b27;
+  background: var(--photip-success-bg);
+  color: var(--photip-success);
 }
 
 .admin-badge--off {
@@ -264,8 +275,8 @@
 }
 
 .admin-status-badge--sucesso {
-  background: #e3f4e3;
-  color: #276b27;
+  background: var(--photip-success-bg);
+  color: var(--photip-success);
 }
 
 .admin-status-badge--erro {
@@ -275,13 +286,13 @@
 
 .admin-status-badge--em_andamento {
   background: var(--photip-yellow-tint);
-  color: #7a5b00;
+  color: var(--photip-primary);
 }
 
 .admin-modal__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(21, 16, 9, 0.4);
+  background: rgba(16, 26, 53, 0.4);
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -372,14 +383,25 @@
   padding: 32px;
   width: 100%;
   max-width: 340px;
-  box-shadow: 0 8px 24px rgba(36, 27, 22, 0.08);
+  box-shadow: 0 8px 24px rgba(16, 26, 53, 0.08);
 }
 
-.admin-login__card h1 {
-  font-family: var(--photip-font-display);
-  font-size: 1.3rem;
+.admin-login__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 1.5rem;
   margin: 0 0 20px;
-  text-align: center;
+}
+
+.admin-login__brand-label {
+  font-family: var(--photip-font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--photip-muted);
 }
 
 .admin-login__error {

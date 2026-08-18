@@ -6,7 +6,6 @@ import { useAppConfig } from '../hooks/useAppConfig';
 import { useCategorias } from '../hooks/useCategorias';
 import { getCategoriaLabel } from '../lib/categorias';
 import { getMockEventMeta } from '../data/exploreCatalog';
-import { setLastEventId } from '../lib/lastEvent';
 import { getCachedSearch, setCachedSearch } from '../lib/photoSearchCache';
 import { getCachedEventInfo, setCachedEventInfo } from '../lib/eventInfoCache';
 import { formatDateLabel, formatLocationLabel, formatPhotosCount } from '../lib/eventDisplay';
@@ -46,10 +45,6 @@ export function EventoPage() {
   const { isFavorite, toggleFavorite, favorites } = useFavorites(eventId);
   const { aiPhotoEditEnabled } = useAppConfig();
   const { categorias } = useCategorias();
-
-  useEffect(() => {
-    setLastEventId(eventId);
-  }, [eventId]);
 
   // Keeps the search results alive across Evento ↔ Favoritas navigation (see
   // photoSearchCache.ts) — restored above via the states' lazy initializers.

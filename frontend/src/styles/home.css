@@ -3,7 +3,7 @@
 }
 
 .home-hero {
-  padding: clamp(24px, 6vw, 44px) clamp(16px, 4vw, 32px) clamp(40px, 8vw, 56px);
+  padding: clamp(20px, 3vw, 26px) clamp(16px, 3.6vw, 28px) clamp(22px, 3.6vw, 28px);
   background-color: var(--photip-primary);
 }
 
@@ -15,10 +15,10 @@
 
 .home-hero__inner h1 {
   color: #fff;
-  font-size: clamp(22px, 5vw, 32px);
+  font-size: clamp(20px, 3.2vw, 25px);
   font-weight: 800;
   line-height: 1.25;
-  margin: 0 0 18px;
+  margin: 0 0 14px;
 }
 
 .home-hero__search {
@@ -28,7 +28,7 @@
   background: #fff;
   border-radius: var(--photip-radius-md);
   padding: 6px 6px 6px 18px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--photip-shadow-lg);
 }
 
 .home-hero__search > input {
@@ -59,13 +59,13 @@
 }
 
 .home-hero__search > button:hover {
-  background: #e6b800;
+  background: var(--photip-yellow-accent-hover);
 }
 
 .home-hero__hint {
   color: rgba(255, 255, 255, 0.9);
   font-size: 13px;
-  margin: 14px 0 0;
+  margin: 10px 0 0;
 }
 
 .home-hero__hint a {
@@ -81,7 +81,7 @@
   right: 0;
   background: #fff;
   border-radius: var(--photip-radius-md);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--photip-shadow-lg);
   overflow: hidden;
   z-index: 20;
   text-align: left;
@@ -130,7 +130,7 @@
 
 .home-content {
   max-width: 1200px;
-  margin: -28px auto 0;
+  margin: -18px auto 0;
   padding: 0 clamp(16px, 4vw, 32px) 60px;
   position: relative;
 }
@@ -293,7 +293,7 @@
 .home-view-toggle__btn--active {
   background: #fff;
   color: var(--photip-primary);
-  box-shadow: 0 2px 6px rgba(36, 27, 22, 0.12);
+  box-shadow: 0 2px 6px rgba(16, 26, 53, 0.12);
 }
 
 .filter-selects {
@@ -505,7 +505,7 @@
   min-width: 220px;
   background: #fff;
   border-radius: var(--photip-radius-md);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--photip-shadow-lg);
   overflow: hidden;
   z-index: 20;
   display: flex;

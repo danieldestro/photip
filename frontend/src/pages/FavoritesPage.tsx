@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { X } from 'lucide-react';
 import { fetchEventInfo, fetchEventPhotos } from '../api/client';
 import { useFavorites } from '../hooks/useFavorites';
 import { useAppConfig } from '../hooks/useAppConfig';
@@ -217,14 +218,7 @@ export function FavoritesPage() {
                   }}
                   aria-label="Remover dos favoritos"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M5 5l14 14M19 5L5 19"
-                      stroke="var(--photip-danger)"
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  <X size={14} strokeWidth={3.5} stroke="var(--photip-danger)" aria-hidden="true" />
                 </button>
               </div>
             ))}

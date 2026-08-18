@@ -4,7 +4,9 @@ import { HomePage } from './pages/HomePage';
 import { ExplorePage } from './pages/ExplorePage';
 import { EventoPage } from './pages/EventoPage';
 import { FavoritesPage } from './pages/FavoritesPage';
+import { AllFavoritesPage } from './pages/AllFavoritesPage';
 import { CheckoutPage } from './pages/CheckoutPage';
+import { LegalPage } from './pages/LegalPage';
 import { AdminAuthProvider } from './admin/AdminAuthContext';
 import { AdminLayout } from './admin/AdminLayout';
 import { LoginPage } from './admin/pages/LoginPage';
@@ -24,9 +26,13 @@ export function App() {
         <Route element={<AppLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/eventos" element={<ExplorePage />} />
+          <Route path="/favoritas" element={<AllFavoritesPage />} />
           <Route path="/evento/:eventId" element={<EventoPage />} />
           <Route path="/evento/:eventId/favoritas" element={<FavoritesPage />} />
           <Route path="/evento/:eventId/checkout" element={<CheckoutPage />} />
+          <Route path="/termos" element={<LegalPage title="Termos de Uso" />} />
+          <Route path="/privacidade" element={<LegalPage title="Política de Privacidade" />} />
+          <Route path="/cookies" element={<LegalPage title="Política de Cookies" />} />
         </Route>
 
         <Route

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
 import type { HeaderContext } from './headerContext';
 
 export function AppLayout() {
@@ -32,6 +33,7 @@ export function AppLayout() {
       <main className="photip-app__content">
         <Outlet context={context} />
       </main>
+      <Footer />
     </div>
   );
 }

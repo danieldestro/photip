@@ -1,4 +1,5 @@
 import { useRef, useState, type ChangeEvent } from 'react';
+import { Camera, ScanFace } from 'lucide-react';
 
 interface SelfieUploadProps {
   onSearch: (file: File) => Promise<void>;
@@ -29,7 +30,9 @@ export function SelfieUpload({ onSearch, loading }: SelfieUploadProps) {
         {preview ? (
           <img src={preview} alt="Prévia da selfie" />
         ) : (
-          <div className="selfie-upload__avatar-placeholder" />
+          <div className="selfie-upload__avatar-placeholder">
+            <ScanFace size={34} strokeWidth={1.6} aria-hidden="true" />
+          </div>
         )}
       </div>
 
@@ -56,15 +59,7 @@ export function SelfieUpload({ onSearch, loading }: SelfieUploadProps) {
           onClick={() => cameraInputRef.current?.click()}
           disabled={loading}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M4 8h3l2-2h6l2 2h3v11H4V8Z"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinejoin="round"
-            />
-            <circle cx="12" cy="13" r="3.2" stroke="currentColor" strokeWidth="2" />
-          </svg>
+          <Camera size={16} strokeWidth={2} aria-hidden="true" />
           Tirar foto
         </button>
         <button

@@ -23,6 +23,10 @@ export interface EventSummary {
   providerSlug: string;
 }
 
+export interface FavoritedEventSummary extends EventSummary {
+  favoritesCount: number;
+}
+
 // Data shown in the event page's header card. A full EventSummary (from the
 // Home/Eventos listing) satisfies this; the autocomplete suggestion only
 // ever fills part of it.

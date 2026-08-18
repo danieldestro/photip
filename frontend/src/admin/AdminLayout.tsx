@@ -1,4 +1,5 @@
 import { NavLink, Navigate, Outlet } from 'react-router-dom';
+import { Logo } from '../components/Logo';
 import { useAdminAuth } from './AdminAuthContext';
 
 const NAV_ITEMS = [
@@ -26,7 +27,10 @@ export function AdminLayout() {
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <div className="admin-sidebar__brand">photip admin</div>
+        <div className="admin-sidebar__brand">
+          <Logo />
+          <span className="admin-sidebar__brand-label">admin</span>
+        </div>
         <nav className="admin-sidebar__nav">
           {NAV_ITEMS.map((item) => (
             <NavLink

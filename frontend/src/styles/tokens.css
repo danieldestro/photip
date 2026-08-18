@@ -1,26 +1,60 @@
 :root {
-  --photip-bg: #fbf7f3;
-  --photip-yellow: #ffc000;
-  --photip-yellow-accent: #ffcc00;
-  --photip-yellow-tint: #ffcc004d;
-  --photip-yellow-tint-strong: #ffcc0066;
-  --photip-primary: #595959;
-  --photip-primary-hover: #404040;
-  --photip-text: #241b16;
-  --photip-muted: #8a7a70;
-  --photip-border: #ece3dc;
-  --photip-viewer-bg: #151009;
+  /* photip design system — https://... (design-system-photip.md) */
+  --photip-bg: #f8fafc;
+  --photip-yellow: #06b6d4;
+  --photip-yellow-accent: #06b6d4;
+  --photip-yellow-accent-hover: #0891b2;
+  --photip-yellow-tint: #06b6d44d;
+  --photip-yellow-tint-strong: #06b6d466;
+  --photip-primary: #101a35;
+  --photip-primary-hover: #0a1226;
+  --photip-text: #101a35;
+  --photip-muted: #64748b;
+  --photip-border: #e2e8f0;
+  --photip-viewer-bg: #101a35;
 
-  --photip-danger: #c62f2f;
-  --photip-danger-bg: #fdecea;
-  --photip-danger-border: #f3b7ae;
+  /* Extra brand tokens (design-system-photip.md §5) — not all wired into components yet,
+     kept available for premium/AI-related features and future work. */
+  --photip-secondary: #14d6c5;
+  --photip-accent: #6366f1;
 
-  --photip-font-display: 'Archivo Black', 'Arial Black', sans-serif;
-  --photip-font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Semantic tokens — never reuse brand colors directly for status. */
+  --photip-danger: #dc2626;
+  --photip-danger-bg: #fef2f2;
+  --photip-danger-border: #fca5a5;
+  --photip-success: #16a34a;
+  --photip-success-bg: #f0fdf4;
+  --photip-warning: #f59e0b;
+  --photip-warning-bg: #fffbeb;
+  --photip-info: #0284c7;
+  --photip-info-bg: #f0f9ff;
 
-  --photip-radius-sm: 10px;
-  --photip-radius-md: 14px;
-  --photip-radius-lg: 18px;
+  --photip-font-display: 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --photip-font-body: 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Buttons & inputs / Cards / Modals & sheets — design-system-photip.md §12.
+     Fully-round elements (badges, pills, avatars) use 999px / 50% directly instead
+     of a token, per §12's "Pills: full" rule. */
+  --photip-radius-sm: 12px;
+  --photip-radius-md: 16px;
+  --photip-radius-lg: 20px;
+
+  --photip-shadow-sm: 0 1px 2px rgba(16, 26, 53, 0.05);
+  --photip-shadow-md: 0 4px 12px rgba(16, 26, 53, 0.08);
+  --photip-shadow-lg: 0 12px 32px rgba(16, 26, 53, 0.12);
+
+  /* Multiples of 4 — design-system-photip.md §13. Available for new work; existing
+     hand-tuned clamp()/px spacing wasn't retrofitted to avoid unrelated layout churn. */
+  --photip-space-1: 4px;
+  --photip-space-2: 8px;
+  --photip-space-3: 12px;
+  --photip-space-4: 16px;
+  --photip-space-5: 20px;
+  --photip-space-6: 24px;
+  --photip-space-8: 32px;
+  --photip-space-10: 40px;
+  --photip-space-12: 48px;
+  --photip-space-16: 64px;
 
   /* Width of the event page's content column (photo thumbs grid included) — the photo
      viewer popup caps itself to this on large screens instead of stretching edge to edge. */
@@ -33,4 +67,16 @@
   /* Fallback for the fixed app header's height, used only until AppLayout measures the
      real rendered height (which varies with viewport width) and overwrites this. */
   --photip-header-height: 66px;
+
+  /* Dark mode palette — design-system-photip.md §31. Intentionally NOT wired to
+     `prefers-color-scheme` or a toggle yet: only the base surfaces are defined here,
+     and most components (inputs, admin, viewer chrome, borders) still hardcode
+     light-mode colors, so flipping this on now would render a half-dark, broken UI.
+     Kept as reference tokens for when a full dark-mode pass happens. */
+  --photip-dark-bg: #101a35;
+  --photip-dark-surface: #17213d;
+  --photip-dark-surface-2: #202b48;
+  --photip-dark-text: #ffffff;
+  --photip-dark-text-secondary: #cbd5e1;
+  --photip-dark-text-muted: #94a3b8;
 }

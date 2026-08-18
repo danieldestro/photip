@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface CategoryPillItem {
   id: string;
@@ -58,7 +59,7 @@ export function CategoryPills({ categories, onSelect, size = 'default' }: Catego
         aria-label="Categorias anteriores"
         disabled={!canScrollLeft}
       >
-        ‹
+        <ChevronLeft size={16} strokeWidth={2.4} aria-hidden="true" />
       </button>
 
       <div
@@ -92,7 +93,7 @@ export function CategoryPills({ categories, onSelect, size = 'default' }: Catego
         aria-label="Próximas categorias"
         disabled={!canScrollRight}
       >
-        ›
+        <ChevronRight size={16} strokeWidth={2.4} aria-hidden="true" />
       </button>
     </div>
   );

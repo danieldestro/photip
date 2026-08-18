@@ -1,4 +1,12 @@
-import type { Categoria, EventHeaderInfo, EventNameSuggestion, EventSummary, Photo, Provedor } from '../types';
+import type {
+  Categoria,
+  EventHeaderInfo,
+  EventNameSuggestion,
+  EventSummary,
+  FavoritedEventSummary,
+  Photo,
+  Provedor,
+} from '../types';
 
 export async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(path, {
@@ -94,6 +102,10 @@ export function clearEventFavorites(eventId: string): Promise<{ ok: boolean }> {
 
 export function fetchTotalFavoritesCount(): Promise<{ total: number }> {
   return request('/api/favoritos/contagem');
+}
+
+export function fetchFavoritedEvents(): Promise<{ events: FavoritedEventSummary[] }> {
+  return request('/api/favoritos/eventos');
 }
 
 export function fetchAppConfig(): Promise<{ features: { aiPhotoEdit: boolean } }> {
